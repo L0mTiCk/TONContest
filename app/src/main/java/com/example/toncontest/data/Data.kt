@@ -3,8 +3,33 @@ package com.example.toncontest.data
 import com.example.toncontest.data.testing.mnemonicRandom
 
 object Data {
-
-    var mnemonic0 = MutableList<String>(24) {""}
+    val testMnemon = mutableListOf(
+        "alfa",
+        "beta",
+        "wolf",
+        "computer",
+        "man",
+        "angel",
+        "truck",
+        "clown",
+        "oxygen",
+        "gamma",
+        "crate",
+        "box",
+        "apple",
+        "cherry",
+        "pop",
+        "balloon",
+        "mixer",
+        "banana",
+        "potato",
+        "desk",
+        "oak",
+        "pine",
+        "burch",
+        "dirt"
+    )
+    var mnemonic0: MutableList<String> = testMnemon
 
     // Congratulations screen data
     val congratsMainText = "Your TON Wallet has just been created. \n" +
@@ -21,32 +46,6 @@ object Data {
             "write these words down."
     val okButtonText = "OK, sorry"
     val skipButtonText = "Skip"
-    val testMnemon = listOf(
-        "ds",
-        "angel",
-        "wolf",
-        "computer",
-        "man",
-        "angel",
-        "wolf",
-        "computer",
-        "idk",
-        "angel",
-        "wolf",
-        "computer",
-        "idk",
-        "computer",
-        "computer",
-        "computer",
-        "computer",
-        "computer",
-        "computer",
-        "computer",
-        "computer",
-        "computer",
-        "computer",
-        "computer"
-    )
     //set delay for alert in minutes
     const val delay = 1
     var entryTime = -1
@@ -56,4 +55,14 @@ object Data {
     var testTimeMainText = "Let’s check that you wrote them down correctly. Please enter the words \n" +
             "${mnemonicRandom[0]}, ${mnemonicRandom[1]} and ${mnemonicRandom[2]}."
     val testTimeHeaderText = "Test time!"
+    val testAlertTitle = "Incorrect words"
+    val testAlertText = "The secret words you have entered\ndo not match the ones in the list."
+    val testWordsButtonText = "See words"
+    val testAgainButtonText = "Try again"
+
+    //success screen
+    val successMainText = "Now set up a passcode to secure\ntransactions."
+    val successHeaderText = "Perfect!"
+    val successButtonText = "Set a Passcode"
+    val checkBoxText = "Enable Biometric Auth"
 }

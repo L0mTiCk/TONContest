@@ -1,12 +1,10 @@
 package com.example.toncontest.ui.theme.screens.start
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -23,17 +21,87 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
+import com.example.toncontest.data.testing.checkCorrectness
 import com.example.toncontest.data.testing.checkRandom
-import com.example.toncontest.data.testing.leftScreen
 import com.example.toncontest.data.testing.mnemonicRandom
+import com.example.toncontest.data.testing.textFieldsInput
 import com.example.toncontest.ui.theme.Light_Blue
-import com.example.toncontest.ui.theme.Shapes
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.*
 
 @Composable
 fun TestingScreen(navController: NavController) {
+    var showDialog by remember { mutableStateOf(false)}
     checkRandom()
+    @Composable
+    fun TestingAlert(navController: NavController, show: Boolean) {
+        var showDialogLocal = remember { mutableStateOf(show) }
+        if (showDialogLocal.value) {
+            AlertDialog(
+                onDismissRequest = { showDialogLocal.value = false; showDialog = false },
+                backgroundColor = Color.White,
+                contentColor = Color.Black,
+                title = { Text(text = Data.testAlertTitle) },
+                text = { Text(Data.testAlertText) },
+                confirmButton = {
+                    Text(text = Data.testWordsButtonText,
+                        color = Light_Blue,
+                        fontFamily = robotoFamily,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable {
+                                showDialogLocal.value = false
+                                showDialog = false
+                                navController.popBackStack()
+                            }
+                            .padding(20.dp)
+                    )
+                    Text(text = Data.testAgainButtonText,
+                        color = Light_Blue,
+                        fontFamily = robotoFamily,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable {
+                                showDialogLocal.value = false
+                                showDialog = false
+                            }
+                            .padding(20.dp)
+                    )
+                }
+            )
+        }
+    }
+
+    @Composable
+    fun TestingBackButton(text: String, backColor: Color, textColor: Color = Color.White, navController: NavController, route: String){
+        Button(onClick = {
+            if (checkCorrectness())
+                navController.navigate(route)
+            else {
+                showDialog = true
+            }
+        },
+            colors = ButtonDefaults.buttonColors(backgroundColor = backColor),
+            shape = RoundedCornerShape(10.dp),
+            elevation = ButtonDefaults.elevation(0.dp, 0.dp)
+        ) {
+            Text(text = text,
+                color = textColor,
+                textAlign = TextAlign.Center,
+                fontFamily = robotoFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 15.sp,
+                modifier = Modifier
+                    .width(200.dp)
+                    .padding(top = 14.dp, bottom = 14.dp)
+            )
+        }
+        if(showDialog) {
+            TestingAlert(navController = navController, showDialog)
+        }
+    }
 
     Scaffold(
         topBar = { NavBack(navController = navController
@@ -71,15 +139,15 @@ fun TestingScreen(navController: NavController) {
             LazyColumn(
                 modifier = Modifier
                     .padding(top = 28.dp)
-                    .height(170.dp)
+                    //.height(170.dp)
             ) {
                 items(mnemonicRandom) {  item ->
                     TestingTextInput(
                         number = item,
                         Modifier
-                            .padding(bottom = 12.dp)
+                            .padding(bottom = 8.dp)
                             .width(200.dp)
-                            .height(44.dp)
+                            .height(51.dp)
                     )
                 }
             }
@@ -90,11 +158,10 @@ fun TestingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .fillMaxHeight()
             ) {
-                BackgroundButton(
+                TestingBackButton(
                     text = "Proceed",
                     backColor = Light_Blue,
-                    route = "recovery",
-
+                    route = "success",
                     navController = navController
                 )
                 Spacer(modifier = Modifier.height(108.dp))
@@ -108,24 +175,25 @@ fun TestingScreen(navController: NavController) {
 fun TestingTextInput(number: Int, modifier: Modifier = Modifier){
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
-
     Box(modifier = modifier) {
         TextField(
             value = text,
-            onValueChange = { text = it },
-            leadingIcon = { Text(text = "$number:", color = Color.Gray,textAlign = TextAlign.End, modifier = Modifier.width(29.dp) )},
+            singleLine = true,
+            onValueChange = {
+                text = it
+                textFieldsInput[mnemonicRandom.indexOf(number)] = it
+                            },
+            leadingIcon = { Text(text = "$number:", color = Color.Gray, fontSize = 15.sp, textAlign = TextAlign.End, modifier = Modifier.width(24.dp) )},
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
                 .onFocusChanged { isFocused = it.isFocused }
-                .verticalScroll(state = rememberScrollState(), enabled = false),
-            textStyle = MaterialTheme.typography.body1,
+                .height(51.dp),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Light_Blue,
                 unfocusedIndicatorColor = Color.Gray,
                 disabledIndicatorColor = Color.Gray
-            ),
+            )
         )
     }
 }
+

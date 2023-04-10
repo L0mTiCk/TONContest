@@ -2,10 +2,9 @@ package com.example.toncontest.data.testing
 
 import com.example.toncontest.data.Data
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 var mnemonicRandom: MutableList<Int> = mutableListOf(0, 0, 0)
-var leftScreen = false
+var textFieldsInput: MutableList<String> = mutableListOf("", "", "")
 
 fun genRandomTesting(){
     val random = Random(System.currentTimeMillis())
@@ -20,12 +19,14 @@ fun genRandomTesting(){
 }
 
 fun checkRandom(){
-    if(leftScreen)
-        genRandomTesting()
-    else if (mnemonicRandom.contains(0))
+    if (mnemonicRandom.contains(0))
         genRandomTesting()
 }
 
-fun chekCorectness(str1: String, str2: String, str3: String){
-
+fun checkCorrectness(): Boolean {
+    for (index in 0..2) {
+        if (textFieldsInput[index] != Data.mnemonic0[mnemonicRandom[index] - 1])
+            return false
+    }
+    return true
 }
