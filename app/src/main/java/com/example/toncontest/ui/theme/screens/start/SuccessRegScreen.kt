@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.start
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -25,15 +26,17 @@ import com.example.toncontest.ui.theme.screens.NavBack
 fun SuccessScreen(navController: NavController) {
     var checked by remember { mutableStateOf(false) }
     //UI
-    Scaffold(topBar = { NavBack(navController = navController) },
-        backgroundColor = Color.White) {
+    Scaffold(
+        topBar = { NavBack(navController = navController) },
+        backgroundColor = Color.White
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(it),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(100.dp))
             Loader(R.raw.success)
             Text(
                 text = Data.successHeaderText,
@@ -54,6 +57,7 @@ fun SuccessScreen(navController: NavController) {
                 modifier = Modifier
                     .width(280.dp)
             )
+
         }
         Column(
             verticalArrangement = Arrangement.Bottom,
@@ -73,7 +77,7 @@ fun SuccessScreen(navController: NavController) {
                 )
                 Text(
                     text = Data.checkBoxText,
-                    modifier = Modifier.padding(start = 12.dp),
+                    modifier = Modifier.padding(start = 12.dp).clickable { checked = !checked },
                     fontFamily = robotoFamily,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Normal
@@ -82,7 +86,7 @@ fun SuccessScreen(navController: NavController) {
             BackgroundButton(
                 text = Data.successButtonText,
                 backColor = Light_Blue,
-                route = "start",
+                route = "passcode",
                 navController = navController
             )
             Spacer(modifier = Modifier.height(108.dp))

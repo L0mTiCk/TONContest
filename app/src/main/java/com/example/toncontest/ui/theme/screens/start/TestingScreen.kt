@@ -171,6 +171,7 @@ fun TestingScreen(navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TestingTextInput(number: Int, modifier: Modifier = Modifier){
     var text by remember { mutableStateOf("") }

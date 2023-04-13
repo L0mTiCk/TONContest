@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.toncontest.ui.theme.TONContestTheme
 import com.example.toncontest.ui.theme.screens.RecoveryScreen
+import com.example.toncontest.ui.theme.screens.start.PasscodeScreen
 import com.example.toncontest.ui.theme.screens.start.SuccessScreen
 import com.example.toncontest.ui.theme.screens.start.TestingScreen
 
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TONContestTheme {
+            TONContestTheme(darkTheme = false) {
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -29,12 +30,13 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
                     Box(Modifier.fillMaxSize()) {
-                        NavHost(navController = navController, startDestination = "success") {
+                        NavHost(navController = navController, startDestination = "passcode") {
                             composable(route = "start") { StartScreen(navController = navController) }
                             composable(route = "congrats") { CongratsScreen(navController = navController) }
                             composable(route = "recovery") { RecoveryScreen(navController = navController) }
                             composable(route = "testing") { TestingScreen(navController = navController) }
                             composable(route = "success") { SuccessScreen(navController = navController) }
+                            composable(route = "passcode") { PasscodeScreen(navController = navController) }
                         }
                     }
                 }

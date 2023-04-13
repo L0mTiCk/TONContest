@@ -32,7 +32,7 @@ fun CongratsScreen(navController: NavController) {
                 .padding(it),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(100.dp))
             Loader(R.raw.congratulations)
             Text(
                 text = Data.congratsHeaderText,

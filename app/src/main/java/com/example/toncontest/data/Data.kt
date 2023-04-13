@@ -65,4 +65,14 @@ object Data {
     val successHeaderText = "Perfect!"
     val successButtonText = "Set a Passcode"
     val checkBoxText = "Enable Biometric Auth"
+
+    //passcode screen
+    var passcodeForConfirm = mutableListOf<Int>()
+    var passcodeDigitNum = 4
+    val setPasscodeHeaderText = "Set a Passcode"
+    val passcodeMainText = "Enter the $passcodeDigitNum digits in the passcode"
+    val confirmPasscodeHeaderText = "Confirm a Passcode"
+    val passcodeButtonText = "Passcode options"
+    val numsForButtons = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, -1, 0, -1)
+    val lettersForButtons = listOf("", "", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "", "+")
 }
