@@ -3,7 +3,7 @@ package com.example.toncontest.data
 import com.example.toncontest.data.testing.mnemonicRandom
 
 object Data {
-    val testMnemon = mutableListOf(
+    val testMnemonic = mutableListOf(
         "alfa",
         "beta",
         "wolf",
@@ -29,7 +29,13 @@ object Data {
         "burch",
         "dirt"
     )
-    var mnemonic0: MutableList<String> = testMnemon
+    var mnemonic0: MutableList<String> = testMnemonic
+
+    //start screen
+    val startHeaderText = "TON Wallet"
+    val startMainText = "TON Wallet allows you to make fast and\n" +
+            "secure blockchain-based payments\n" +
+            "without intermediaries."
 
     // Congratulations screen data
     val congratsMainText = "Your TON Wallet has just been created. \n" +
@@ -75,4 +81,30 @@ object Data {
     val passcodeButtonText = "Passcode options"
     val numsForButtons = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, -1, 0, -1)
     val lettersForButtons = listOf("", "", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "", "+")
+
+    //import screen
+    var importMnemonic = MutableList<String>(24) {""}
+    val importAlertTitle = "Incorrect words"
+    val importAlertText = "Sorry, you have entered incorrect secret words. Please double check and try again."
+    val importAlertButtonText = "OK"
+    val importHeaderText = "24 Secret Words"
+    val importMainText = "You can restore access to your wallet by entering 24 words you wrote when down you creating the wallet."
+    val importButtonText = "Continue"
+    val importNoMnemonicText = "I don’t have those"
+
+    //successImport screen
+    val successImportMainText = "Your wallet has just\nbeen imported!"
+
+    //no mnemonic screen
+    val noMnemonicHeaderText = "Too bad!"
+    val noMnemonicMainText = "Without the secret words you can’t restore\naccess to the wallet."
+    val noMnemonicImportButtonText = "Enter 24 secret words"
+    val noMnemonicCreateButtonText = "Create a new empty wallet instead"
+
+    //done screen
+    val doneHeaderText = "Ready to go!"
+    val doneMainText = "You are all set. Now you have a wallet that\n" +
+            "only you control — directly, without\n" +
+            "middlemen or bankers. "
+    val doneButtonText = "View my wallet"
 }

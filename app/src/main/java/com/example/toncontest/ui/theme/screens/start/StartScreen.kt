@@ -1,14 +1,8 @@
-package com.example.toncontest
+package com.example.toncontest.ui.theme.screens.start
 
-import android.graphics.fonts.FontFamily
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,18 +11,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.toncontest.R
+import com.example.toncontest.data.Data
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.BackgroundButton
 import com.example.toncontest.ui.theme.screens.Loader
-
-val startText = "TON Wallet allows you to make fast and\n" +
-        "secure blockchain-based payments\n" +
-        "without intermediaries."
 
 @Composable
 fun StartScreen(navController: NavController){
@@ -43,7 +31,7 @@ fun StartScreen(navController: NavController){
             Spacer(modifier = Modifier.height(174.dp))
             Loader(R.raw.start)
             Text(
-                text = "TON Wallet",
+                text = Data.startHeaderText,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = robotoFamily,
@@ -51,7 +39,7 @@ fun StartScreen(navController: NavController){
                     .padding(top = 12.dp, end = 12.dp)
             )
             Text(
-                text = startText,
+                text = Data.startMainText,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = robotoFamily,
@@ -71,16 +59,16 @@ fun StartScreen(navController: NavController){
                 route = "congrats",
                 navController = navController
             )
+            Spacer(modifier = Modifier.height(8.dp))
             BackgroundButton(
                 text = "Import existing wallet",
                 backColor = Color.White,
                 textColor = Light_Blue,
-                route = "start",
+                route = "import",
                 navController = navController
             )
             Spacer(modifier = Modifier.height(45.dp))
         }
     }
-
 }
 

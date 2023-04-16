@@ -14,7 +14,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.toncontest.ui.theme.TONContestTheme
 import com.example.toncontest.ui.theme.screens.RecoveryScreen
+import com.example.toncontest.ui.theme.screens.start.DoneScreen
+import com.example.toncontest.ui.theme.screens.start.ImportScreen
+import com.example.toncontest.ui.theme.screens.start.NoMnemonicScreen
 import com.example.toncontest.ui.theme.screens.start.PasscodeScreen
+import com.example.toncontest.ui.theme.screens.start.StartScreen
+import com.example.toncontest.ui.theme.screens.start.SuccessImportScreen
 import com.example.toncontest.ui.theme.screens.start.SuccessScreen
 import com.example.toncontest.ui.theme.screens.start.TestingScreen
 
@@ -30,13 +35,17 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
                     Box(Modifier.fillMaxSize()) {
-                        NavHost(navController = navController, startDestination = "passcode") {
+                        NavHost(navController = navController, startDestination = "start") {
                             composable(route = "start") { StartScreen(navController = navController) }
                             composable(route = "congrats") { CongratsScreen(navController = navController) }
                             composable(route = "recovery") { RecoveryScreen(navController = navController) }
                             composable(route = "testing") { TestingScreen(navController = navController) }
                             composable(route = "success") { SuccessScreen(navController = navController) }
                             composable(route = "passcode") { PasscodeScreen(navController = navController) }
+                            composable(route = "import") { ImportScreen(navController = navController) }
+                            composable(route = "successImport") { SuccessImportScreen(navController = navController) }
+                            composable(route = "noMnemonic") { NoMnemonicScreen(navController = navController) }
+                            composable(route = "done") { DoneScreen(navController = navController) }
                         }
                     }
                 }

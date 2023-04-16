@@ -1,15 +1,13 @@
 package com.example.toncontest.ui.theme.screens.start
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -21,43 +19,29 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
-import com.example.toncontest.data.testing.checkCorrectness
-import com.example.toncontest.data.testing.checkRandom
-import com.example.toncontest.data.testing.mnemonicRandom
-import com.example.toncontest.data.testing.textFieldsInput
+import com.example.toncontest.data.importCheck
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
-import com.example.toncontest.ui.theme.screens.*
+import com.example.toncontest.ui.theme.screens.DefaultText
+import com.example.toncontest.ui.theme.screens.Loader
+import com.example.toncontest.ui.theme.screens.NavBack
 
 @Composable
-fun TestingScreen(navController: NavController) {
-    var showDialog by remember { mutableStateOf(false)}
-    checkRandom()
+fun ImportScreen(navController: NavController) {
+    var showDialog by remember { mutableStateOf(false) }
+
     @Composable
-    fun TestingAlert(navController: NavController, show: Boolean) {
+    fun ImportAlert(show: Boolean) {
         var showDialogLocal = remember { mutableStateOf(show) }
         if (showDialogLocal.value) {
             AlertDialog(
                 onDismissRequest = { showDialogLocal.value = false; showDialog = false },
                 backgroundColor = Color.White,
                 contentColor = Color.Black,
-                title = { Text(text = Data.testAlertTitle) },
-                text = { Text(Data.testAlertText) },
+                title = { Text(text = Data.importAlertTitle) },
+                text = { Text(Data.importAlertText) },
                 confirmButton = {
-                    Text(text = Data.testWordsButtonText,
-                        color = Light_Blue,
-                        fontFamily = robotoFamily,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .clickable {
-                                showDialogLocal.value = false
-                                showDialog = false
-                                navController.popBackStack()
-                            }
-                            .padding(20.dp)
-                    )
-                    Text(text = Data.testAgainButtonText,
+                    Text(text = Data.importAlertButtonText,
                         color = Light_Blue,
                         fontFamily = robotoFamily,
                         fontSize = 14.sp,
@@ -75,19 +59,27 @@ fun TestingScreen(navController: NavController) {
     }
 
     @Composable
-    fun TestingBackButton(text: String, backColor: Color, textColor: Color = Color.White, navController: NavController, route: String){
-        Button(onClick = {
-            if (checkCorrectness())
-                navController.navigate(route)
-            else {
-                showDialog = true
-            }
-        },
+    fun ImportBackButton(
+        text: String,
+        backColor: Color,
+        textColor: Color = Color.White,
+        navController: NavController,
+        route: String
+    ) {
+        Button(
+            onClick = {
+                if (importCheck())
+                    navController.navigate(route)
+                else {
+                    showDialog = true
+                }
+            },
             colors = ButtonDefaults.buttonColors(backgroundColor = backColor),
             shape = RoundedCornerShape(10.dp),
             elevation = ButtonDefaults.elevation(0.dp, 0.dp)
         ) {
-            Text(text = text,
+            Text(
+                text = text,
                 color = textColor,
                 textAlign = TextAlign.Center,
                 fontFamily = robotoFamily,
@@ -98,14 +90,16 @@ fun TestingScreen(navController: NavController) {
                     .padding(top = 14.dp, bottom = 14.dp)
             )
         }
-        if(showDialog) {
-            TestingAlert(navController = navController, showDialog)
+        if (showDialog) {
+            ImportAlert(showDialog)
         }
     }
-
     Scaffold(
-        topBar = { NavBack(navController = navController
-        ) },
+        topBar = {
+            NavBack(
+                navController = navController
+            )
+        },
         backgroundColor = Color.White,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -113,13 +107,13 @@ fun TestingScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
                 .padding(it)
+                .verticalScroll(rememberScrollState(), enabled = true)
         ) {
             Spacer(modifier = Modifier.height(50.dp))
-            Loader(res = R.raw.testtime)
+            Loader(res = R.raw.recoveryphrase)
             DefaultText(
-                text = Data.testTimeHeaderText,
+                text = Data.importHeaderText,
                 fontFamily = robotoFamily,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
@@ -128,7 +122,7 @@ fun TestingScreen(navController: NavController) {
                 paddingTop = 12.dp
             )
             DefaultText(
-                text = Data.testTimeMainText,
+                text = Data.importMainText,
                 fontFamily = robotoFamily,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Medium,
@@ -136,43 +130,62 @@ fun TestingScreen(navController: NavController) {
                 width = 280.dp,
                 paddingTop = 12.dp
             )
-            LazyColumn(
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = Data.importNoMnemonicText,
+                fontFamily = robotoFamily,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Normal,
+                color = Light_Blue,
                 modifier = Modifier
-                    .padding(top = 28.dp)
-                    //.height(170.dp)
+                    .clickable { navController.navigate("noMnemonic") }
+            )
+            Column(
+                modifier = Modifier
+                    .height(1484.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(mnemonicRandom) {  item ->
-                    TestingTextInput(
-                        number = item,
-                        Modifier
-                            .padding(bottom = 8.dp)
-                            .width(200.dp)
-                            .height(55.dp)
-                    )
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(top = 20.dp,),
+                    userScrollEnabled = false,
+                    ) {
+                    items(24) { item ->
+                        ImportTextInput(
+                            number = item + 1,
+                            Modifier
+                                .padding(bottom = 8.dp)
+                                .width(200.dp)
+                                .height(55.dp)
+                        )
+                    }
                 }
             }
             Column(
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .padding(top = 28.dp)
                     .fillMaxWidth()
                     .fillMaxHeight()
             ) {
-                TestingBackButton(
-                    text = "Proceed",
+                ImportBackButton(
+                    text = Data.importButtonText,
                     backColor = Light_Blue,
                     route = "success",
                     navController = navController
                 )
-                Spacer(modifier = Modifier.height(108.dp))
+                Spacer(modifier = Modifier.height(56.dp))
 
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TestingTextInput(number: Int, modifier: Modifier = Modifier){
+fun ImportTextInput(number: Int, modifier: Modifier = Modifier){
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
     Box(modifier = modifier) {
@@ -181,9 +194,9 @@ fun TestingTextInput(number: Int, modifier: Modifier = Modifier){
             singleLine = true,
             onValueChange = {
                 text = it
-                textFieldsInput[mnemonicRandom.indexOf(number)] = it
-                            },
-            leadingIcon = { Text(text = "$number:", color = Color.Gray, fontSize = 15.sp, textAlign = TextAlign.End, modifier = Modifier.width(24.dp) )},
+                Data.importMnemonic[number - 1] = it
+            },
+            leadingIcon = { Text(text = "$number:", color = Color.Gray, fontSize = 15.sp, textAlign = TextAlign.End, modifier = Modifier.width(24.dp) ) },
             modifier = Modifier
                 .onFocusChanged { isFocused = it.isFocused }
                 .height(55.dp),

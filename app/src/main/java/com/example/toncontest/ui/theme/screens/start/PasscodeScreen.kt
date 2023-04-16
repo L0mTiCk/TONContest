@@ -36,8 +36,6 @@ fun PasscodeScreen(navController: NavController) {
     var currentIndex by remember { mutableStateOf(0) }
     var isConfirmation by remember { mutableStateOf(false) }
     var isNavigate by remember { mutableStateOf(false) }
-    var passSaved by remember { mutableStateOf(true) }
-
 
     @Composable
     fun PasscodeKeyboard(){
@@ -47,6 +45,7 @@ fun PasscodeScreen(navController: NavController) {
             var backColor = if (index != -2) Light_Gray else Color.Transparent
             Button(
                 onClick = {
+                    //TODO: make this shit working
                     if(currentIndex < numOfDigits) {
                         password.add(index)
                         currentIndex++
@@ -56,6 +55,20 @@ fun PasscodeScreen(navController: NavController) {
                             isConfirmation = true
 
                         Log.d("passcode", password.toString())
+                    }
+
+                    if (currentIndex == numOfDigits) {
+                        if (!isConfirmation) {
+                            isConfirmation = true
+                            Data.passcodeForConfirm = password
+                            password.clear()
+                            currentIndex = 0
+                        } else if (isConfirmation && password == Data.passcodeForConfirm) {
+                            navController.navigate("done")
+                        } else {
+                            password.clear()
+                            currentIndex = 0
+                        }
                     }
                           },
                 modifier = Modifier
@@ -184,19 +197,25 @@ fun PasscodeScreen(navController: NavController) {
             )
         }
     }
-    if(isConfirmation && passSaved){
+
+    /*if(isConfirmation && passSaved){
         Data.passcodeForConfirm = password
         password.clear()
         currentIndex = 0
         passSaved = false
     }
 
-    if(isNavigate) {
+     */
+
+
+    /*if(isNavigate) {
         if(password.equals(Data.passcodeForConfirm)) {
             navController.navigate("start")
             isNavigate = false
         }
     }
+
+     */
 
     //UI
     Scaffold(

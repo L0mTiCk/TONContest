@@ -62,7 +62,7 @@ fun RecoveryScreen(navController: NavController) {
                 DefaultText(text = Data.recoveryMainText, fontFamily = robotoFamily, textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium, fontSize = 15.sp , width = 280.dp)
                 MnemonicPhrases(
-                    mnemonics = Data.testMnemon
+                    mnemonics = Data.testMnemonic
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 ButtonWithAlertDialog(text = "Done", backColor = Light_Blue,
@@ -101,7 +101,7 @@ fun MnemonicPhrases(mnemonics: List<String>) {
                                 fontSize = 15.sp
                             )
                         ) {
-                            append("$item")
+                            append(item.toString())
                         }
                     }
                 )
