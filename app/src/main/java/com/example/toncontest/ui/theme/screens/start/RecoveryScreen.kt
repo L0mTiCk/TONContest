@@ -1,12 +1,17 @@
-package com.example.toncontest.ui.theme.screens
+package com.example.toncontest.ui.theme.screens.start
 
+import android.util.Log
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,18 +29,27 @@ import com.example.toncontest.data.Data
 import com.example.toncontest.data.congrats.setEntryTime
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
+import com.example.toncontest.ui.theme.screens.ButtonWithAlertDialog
+import com.example.toncontest.ui.theme.screens.DefaultText
+import com.example.toncontest.ui.theme.screens.Loader
+import com.example.toncontest.ui.theme.screens.NavBack
 
 @Composable
 fun RecoveryScreen(navController: NavController) {
     //set entry time
     setEntryTime()
-
+    var scrollState = rememberScrollState()
     //UI
     Column(modifier = Modifier
         .fillMaxWidth()
     ) {
         Scaffold(
-            topBar = { NavBack(navController = navController ) },
+            topBar = {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    NavBack(navController = navController)
+
+                }
+            },
             backgroundColor = Color.White,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -43,22 +57,20 @@ fun RecoveryScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .weight(weight = 1f, fill = true)
+                    .verticalScroll(scrollState, enabled = true)
+                    .weight(weight = 1f)
                     .padding(it)
             ) {
                 Spacer(modifier = Modifier.height(50.dp))
                 Loader(res = R.raw.recoveryphrase)
-                DefaultText(text = Data.recoveryHeaderText, fontFamily = robotoFamily, textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold, fontSize = 24.sp , width = 240.dp)
-//                Text(
-//                    text = Data.recoveryHeaderText,
-//                    fontFamily = robotoFamily,
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 24.sp,
-//                    modifier = Modifier
-//                        .padding(top = 12.dp)
-//                )
+                Text(
+                    text = Data.recoveryHeaderText,
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+                )
                 DefaultText(text = Data.recoveryMainText, fontFamily = robotoFamily, textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium, fontSize = 15.sp , width = 280.dp)
                 MnemonicPhrases(
@@ -109,6 +121,11 @@ fun MnemonicPhrases(mnemonics: List<String>) {
             }
         }   
     }
+}
+
+@Composable
+fun SickHead(){
+
 }
 
 

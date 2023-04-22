@@ -13,7 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.toncontest.ui.theme.TONContestTheme
-import com.example.toncontest.ui.theme.screens.RecoveryScreen
+import com.example.toncontest.ui.theme.screens.main.MainScreen
+import com.example.toncontest.ui.theme.screens.start.RecoveryScreen
 import com.example.toncontest.ui.theme.screens.start.DoneScreen
 import com.example.toncontest.ui.theme.screens.start.ImportScreen
 import com.example.toncontest.ui.theme.screens.start.NoMnemonicScreen
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
                     Box(Modifier.fillMaxSize()) {
-                        NavHost(navController = navController, startDestination = "start") {
+                        NavHost(navController = navController, startDestination = "main") {
                             composable(route = "start") { StartScreen(navController = navController) }
                             composable(route = "congrats") { CongratsScreen(navController = navController) }
                             composable(route = "recovery") { RecoveryScreen(navController = navController) }
@@ -46,6 +47,9 @@ class MainActivity : ComponentActivity() {
                             composable(route = "successImport") { SuccessImportScreen(navController = navController) }
                             composable(route = "noMnemonic") { NoMnemonicScreen(navController = navController) }
                             composable(route = "done") { DoneScreen(navController = navController) }
+
+                            //TODO: redo to another activity launch
+                            composable(route = "main") { MainScreen() }
                         }
                     }
                 }

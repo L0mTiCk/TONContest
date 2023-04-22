@@ -1,5 +1,8 @@
 package com.example.toncontest.ui.theme.screens.start
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +13,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +33,15 @@ import com.example.toncontest.ui.theme.screens.NavBack
 @Composable
 fun ImportScreen(navController: NavController) {
     var showDialog by remember { mutableStateOf(false) }
+    var scrollState = rememberScrollState()
+
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (scrollState.value < 450) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 100,
+            easing = LinearEasing
+        )
+    )
 
     @Composable
     fun ImportAlert(show: Boolean) {
@@ -99,6 +112,15 @@ fun ImportScreen(navController: NavController) {
             NavBack(
                 navController = navController
             )
+            Row(modifier = Modifier.fillMaxWidth().height(56.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
+                Text(text = Data.importHeaderText,
+                    fontFamily = robotoFamily,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.alpha(1 - alpha)
+                )
+            }
         },
         backgroundColor = Color.White,
         modifier = Modifier.fillMaxWidth()
@@ -108,18 +130,17 @@ fun ImportScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(it)
-                .verticalScroll(rememberScrollState(), enabled = true)
+                .verticalScroll(scrollState,true)
         ) {
             Spacer(modifier = Modifier.height(50.dp))
             Loader(res = R.raw.recoveryphrase)
-            DefaultText(
+            Text(
                 text = Data.importHeaderText,
                 fontFamily = robotoFamily,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                width = 240.dp,
-                paddingTop = 12.dp
+                modifier = Modifier.alpha(alpha)
             )
             DefaultText(
                 text = Data.importMainText,
@@ -142,20 +163,20 @@ fun ImportScreen(navController: NavController) {
             )
             Column(
                 modifier = Modifier
-                    .height(1484.dp)
+                    .height(1532.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 LazyColumn(
                     modifier = Modifier
-                        .padding(top = 20.dp,),
+                        .padding(top = 20.dp),
                     userScrollEnabled = false,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                     items(24) { item ->
                         ImportTextInput(
                             number = item + 1,
                             Modifier
-                                .padding(bottom = 8.dp)
                                 .width(200.dp)
                                 .height(55.dp)
                         )
@@ -177,36 +198,41 @@ fun ImportScreen(navController: NavController) {
                     navController = navController
                 )
                 Spacer(modifier = Modifier.height(56.dp))
-
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ImportTextInput(number: Int, modifier: Modifier = Modifier){
+fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
-    Box(modifier = modifier) {
-        TextField(
-            value = text,
-            singleLine = true,
-            onValueChange = {
-                text = it
-                Data.importMnemonic[number - 1] = it
-            },
-            leadingIcon = { Text(text = "$number:", color = Color.Gray, fontSize = 15.sp, textAlign = TextAlign.End, modifier = Modifier.width(24.dp) ) },
-            modifier = Modifier
-                .onFocusChanged { isFocused = it.isFocused }
-                .height(55.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Light_Blue,
-                unfocusedIndicatorColor = Color.Gray,
-                disabledIndicatorColor = Color.Gray
+    TextField(
+        value = text,
+        singleLine = true,
+        onValueChange = {
+            text = it
+            Data.importMnemonic[number - 1] = it
+        },
+        leadingIcon = {
+            Text(
+                text = "$number:",
+                color = Color.Gray,
+                fontSize = 15.sp,
+                textAlign = TextAlign.End,
+                modifier = Modifier.width(24.dp)
             )
+        },
+        modifier = Modifier
+            .onFocusChanged { isFocused = it.isFocused }
+            .height(55.dp)
+            .width(200.dp),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.Transparent,
+            focusedIndicatorColor = Light_Blue,
+            unfocusedIndicatorColor = Color.Gray,
+            disabledIndicatorColor = Color.Gray
         )
-    }
+    )
 }
 

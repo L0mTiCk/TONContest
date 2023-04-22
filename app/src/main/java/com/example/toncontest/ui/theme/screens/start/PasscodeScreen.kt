@@ -318,7 +318,3 @@ fun PassLoader(res: Int) {
         LottieAnimation(composition = composition, clipSpec = LottieClipSpec.Progress(0f, .5f),  modifier = Modifier.weight(1f))
     }
 }
-
-
-
-

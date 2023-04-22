@@ -139,11 +139,9 @@ fun NavBack(navController: NavController){
 }
 
 @Composable
-fun Loader(res: Int) {
+fun Loader(res: Int, modifier: Modifier = Modifier.width(100.dp).height(100.dp)) {
     Column(horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .width(100.dp)
-            .height(100.dp)
+        modifier = modifier
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(res))
         LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever, modifier = Modifier.weight(1f))
