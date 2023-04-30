@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.toncontest.R
-import com.example.toncontest.data.MainStrings
+import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 

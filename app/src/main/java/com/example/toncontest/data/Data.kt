@@ -3,6 +3,9 @@ package com.example.toncontest.data
 import com.example.toncontest.data.testing.mnemonicRandom
 
 object Data {
+    var isBiometric = false
+    var isFirstLaunch = true
+
     val testMnemonic = mutableListOf(
         "alfa",
         "beta",

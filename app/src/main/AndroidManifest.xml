@@ -12,11 +12,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.TONContest"
+
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.TONContest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

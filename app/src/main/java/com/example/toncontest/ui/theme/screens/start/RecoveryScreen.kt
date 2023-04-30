@@ -1,17 +1,12 @@
 package com.example.toncontest.ui.theme.screens.start
 
-import android.util.Log
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +30,7 @@ import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.ui.theme.screens.NavBack
 
 @Composable
-fun RecoveryScreen(navController: NavController) {
+fun RecoveryScreen(navController: NavController, isFirstLaunch: Boolean) {
     //set entry time
     setEntryTime()
     var scrollState = rememberScrollState()
@@ -77,9 +72,13 @@ fun RecoveryScreen(navController: NavController) {
                     mnemonics = Data.testMnemonic
                 )
                 Spacer(modifier = Modifier.height(40.dp))
-                ButtonWithAlertDialog(text = "Done", backColor = Light_Blue,
-                    navController = navController, route = "testing")
-                Spacer(modifier = Modifier.height(56.dp))
+                if (isFirstLaunch) {
+                    ButtonWithAlertDialog(
+                        text = "Done", backColor = Light_Blue,
+                        navController = navController, route = "testing"
+                    )
+                    Spacer(modifier = Modifier.height(56.dp))
+                }
             }
         }
     }
@@ -113,7 +112,7 @@ fun MnemonicPhrases(mnemonics: List<String>) {
                                 fontSize = 15.sp
                             )
                         ) {
-                            append(item.toString())
+                            append(item)
                         }
                     }
                 )
@@ -121,11 +120,6 @@ fun MnemonicPhrases(mnemonics: List<String>) {
             }
         }   
     }
-}
-
-@Composable
-fun SickHead(){
-
 }
 
 

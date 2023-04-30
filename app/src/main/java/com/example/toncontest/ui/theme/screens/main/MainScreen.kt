@@ -2,11 +2,16 @@ package com.example.toncontest.ui.theme.screens.main
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,28 +34,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.R
-import com.example.toncontest.ui.theme.components.main.CreatedWallet
+import com.example.toncontest.data.Data
 import com.example.toncontest.ui.theme.components.main.ReceiveButton
 import com.example.toncontest.ui.theme.components.main.SendButton
+import com.example.toncontest.ui.theme.components.main.TransactionColumn
 import com.example.toncontest.ui.theme.robotoFamily
 import kotlinx.coroutines.delay
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
+    Data.isFirstLaunch = false
     var isLoaded by remember { mutableStateOf(false)}
-    var isAppered by remember { mutableStateOf(false) }
-    val loaderAlpha by animateFloatAsState( if(isLoaded) 0f else 1f )
+    var isAppeared by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(false) }
+    val alfa by animateFloatAsState(targetValue = if (isExpanded) 1f else 0f)
+    val max = 300.dp
+    val min = 0.dp
+    val (minPx, maxPx) = with(LocalDensity.current) {min to max}
+    var expandedHeight by remember { mutableStateOf(300.dp) }
+    val expandDp by animateDpAsState(targetValue = if(isExpanded) 0.dp else expandedHeight)
 
-    var balance = 56.2322
+    var balance = 52.0
     var balanceStr = balance.toString().split('.')
 
     Scaffold(
@@ -59,7 +75,7 @@ fun MainScreen() {
         topBar = {
             Row(modifier = Modifier
                 .height(56.dp)
-                .alpha(1f)) {
+                .alpha(alfa)) {
                 Column(modifier = Modifier.padding(start = 16.dp, top = 7.dp)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
@@ -104,7 +120,7 @@ fun MainScreen() {
                 }
                 IconButton(
                     modifier = Modifier.padding(end = 12.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate("settings") }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.settings),
@@ -125,7 +141,8 @@ fun MainScreen() {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp),
+                        .alpha(1 - alfa)
+                        .height(expandDp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -135,6 +152,7 @@ fun MainScreen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
+                            //TODO: change to wallet address
                             text = "Wallet address",
                             fontFamily = robotoFamily,
                             fontSize = 15.sp,
@@ -157,7 +175,6 @@ fun MainScreen() {
                                     }
                                     withStyle(style = SpanStyle(color = Color.White, fontSize = 32.sp)) {
                                         append(".${balanceStr[1]}")
-
                                     }
                                 },
                                 fontFamily = robotoFamily,
@@ -188,15 +205,36 @@ fun MainScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
+                        .draggable(
+                            orientation = Orientation.Vertical,
+                            state = rememberDraggableState { delta ->
+                                val newValue = expandedHeight + delta.dp
+                                expandedHeight = newValue.coerceIn(minPx, maxPx)
+                            },
+                            onDragStopped = { velocity ->
+                                if (velocity < 0) {
+                                    expandedHeight = 0.dp
+                                    isExpanded = true
+                                } else {
+                                    expandedHeight = 300.dp
+                                    isExpanded = false
+                                }
+                            }
+                        )
+                        .clickable {
+                            if (isExpanded)
+                                expandedHeight = 300.dp
+                            isExpanded = !isExpanded
+                        }
                         .background(Color.White, shape = RoundedCornerShape(12.dp)),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     LaunchedEffect(key1 = Unit) {
-                        delay(5000)
+                        delay(1000)
                         isLoaded = true
                         delay(120)
-                        isAppered = true
+                        isAppeared = true
                     }
                     AnimatedVisibility(
                         visible = !isLoaded,
@@ -211,7 +249,7 @@ fun MainScreen() {
                         Loader(res = R.raw.waiting)
                     }
                     AnimatedVisibility(
-                        visible = isAppered,
+                        visible = isAppeared,
                         enter = fadeIn(
                             animationSpec = tween(
                                 1000,
@@ -220,7 +258,8 @@ fun MainScreen() {
                         ),
                         exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing))
                     ) {
-                        CreatedWallet()
+                        //CreatedWallet()
+                        TransactionColumn()
                     }
                 }
             }

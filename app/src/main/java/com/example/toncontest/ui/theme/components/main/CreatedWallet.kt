@@ -12,12 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.lottie.compose.LottieAnimation
 import com.example.toncontest.R
-import com.example.toncontest.data.MainStrings
+import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.robotoFamily
-import com.example.toncontest.ui.theme.screens.DefaultText
-import com.example.toncontest.ui.theme.screens.start.PassLoader
 
 @Composable
 fun CreatedWallet(){

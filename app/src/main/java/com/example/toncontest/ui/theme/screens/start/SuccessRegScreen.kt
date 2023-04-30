@@ -8,7 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.example.toncontest.R
 import androidx.navigation.NavController
 import com.example.toncontest.data.Data
+import com.example.toncontest.data.start.Biometric
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.BackgroundButton
@@ -66,10 +69,14 @@ fun SuccessScreen(navController: NavController) {
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            Row(modifier = Modifier.padding(bottom = 20.dp)) {
+            var checkAlpha = if (Biometric.status(LocalContext.current)) 1f else 0f
+            Row(modifier = Modifier.padding(bottom = 20.dp).alpha(checkAlpha) ) {
                 Checkbox(
                     checked = checked,
-                    onCheckedChange = {it -> checked = it},
+                    //TODO: make it work
+                    onCheckedChange = {it ->
+                        checked = it
+                        Data.isBiometric = it },
                     modifier = Modifier
                         .width(18.dp)
                         .height(18.dp),
