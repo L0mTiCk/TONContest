@@ -65,7 +65,7 @@ fun DoneScreen(navController: NavController){
                 text = Data.doneButtonText,
                 backColor = Light_Blue,
                 //TODO: Change route to main app
-                route = "congrats",
+                route = "main",
                 navController = navController
             )
             Spacer(modifier = Modifier.height(117.dp))

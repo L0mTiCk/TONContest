@@ -22,9 +22,9 @@ import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
-fun ReceiveButton(){
+fun ReceiveButton(onClick: (Boolean) -> Unit){
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { onClick(true) },
         colors = ButtonDefaults.buttonColors(backgroundColor = Light_Blue),
         shape = RoundedCornerShape(10.dp),
         elevation = ButtonDefaults.elevation(0.dp, 0.dp),

@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.start
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -26,8 +27,10 @@ import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.ui.theme.screens.NavBack
 
 @Composable
-fun SuccessScreen(navController: NavController) {
+fun SuccessScreen(navController: NavController, context: Context) {
     var checked by remember { mutableStateOf(false) }
+    val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
     //UI
     Scaffold(
         topBar = { NavBack(navController = navController) },
@@ -70,17 +73,23 @@ fun SuccessScreen(navController: NavController) {
                 .fillMaxHeight()
         ) {
             var checkAlpha = if (Biometric.status(LocalContext.current)) 1f else 0f
-            Row(modifier = Modifier.padding(bottom = 20.dp).alpha(checkAlpha) ) {
+            Row(modifier = Modifier.padding(bottom = 20.dp).alpha(checkAlpha)) {
                 Checkbox(
                     checked = checked,
                     //TODO: make it work
-                    onCheckedChange = {it ->
+                    onCheckedChange = { it ->
                         checked = it
-                        Data.isBiometric = it },
+                        editor.putBoolean("BIOMETRIC", it)
+                        editor.apply()
+                    },
                     modifier = Modifier
                         .width(18.dp)
                         .height(18.dp),
-                    colors = CheckboxDefaults.colors(checkedColor = Light_Blue, uncheckedColor = Color.LightGray, checkmarkColor = Color.White)
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Light_Blue,
+                        uncheckedColor = Color.LightGray,
+                        checkmarkColor = Color.White
+                    )
                 )
                 Text(
                     text = Data.checkBoxText,

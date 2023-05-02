@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.main.settings.components
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,14 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.toncontest.data.Data
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
-fun BiometricSetting() {
-    var checked by remember { mutableStateOf(true) }
+fun BiometricSetting(context: Context) {
+    val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+
+    var checked by remember { mutableStateOf(sharedPref.getBoolean("BIOMETRIC", false)) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +58,8 @@ fun BiometricSetting() {
                     checked = checked,
                     onCheckedChange = {
                         checked = it
-                        Data.isBiometric = it
+                        editor.putBoolean("BIOMETRIC", it)
+                        editor.apply()
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Light_Blue,

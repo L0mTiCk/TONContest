@@ -1,5 +1,6 @@
-package com.example.toncontest.ui.theme.screens.main
+package com.example.toncontest.ui.theme.screens.main.settings
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,11 +25,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.robotoFamily
-import com.example.toncontest.ui.theme.screens.main.settings.SettingsColumn
 
 //navController: NavController
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(navController: NavController, context: Context) {
     Scaffold(
         topBar = {
             Row(
@@ -62,7 +62,7 @@ fun SettingsScreen(navController: NavController) {
                     .fillMaxSize()
                     .background(color = Color.White, shape = RoundedCornerShape(12.dp))
             ) {
-                SettingsColumn(navController = navController)
+                SettingsColumn(navController = navController, context = context)
             }
         },
         backgroundColor = Color.Black

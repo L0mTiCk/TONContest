@@ -1,16 +1,39 @@
-package com.example.toncontest.ui.theme.screens.start
+package com.example.toncontest.ui.theme.screens.main
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,23 +44,21 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.*
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.Light_Gray
 import com.example.toncontest.ui.theme.robotoFamily
-import com.example.toncontest.ui.theme.screens.NavBack
+import com.example.toncontest.ui.theme.screens.start.PassLoader
 
 @Composable
-fun PasscodeScreen(navController: NavController, context: Context) {
+fun LogInScreen(navController: NavController, context: Context) {
     var numOfDigits by remember { mutableStateOf(4) }
     var expanded by remember { mutableStateOf(false) }
     var password by remember { mutableStateOf(mutableListOf<Int>()) }
-    var confirmPassword by remember { mutableStateOf(mutableListOf<Int>()) }
     var currentIndex by remember { mutableStateOf(0) }
-    var isConfirmation by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+    var isNavigated by remember { mutableStateOf(false) }
 
 
     @Composable
@@ -68,6 +89,7 @@ fun PasscodeScreen(navController: NavController, context: Context) {
                     fontFamily = robotoFamily,
                     fontSize = 24.sp,
                     textAlign = TextAlign.Start,
+                    color = Color.Black,
                     modifier = Modifier.width(45.dp)
                 )
                 Text(
@@ -111,7 +133,7 @@ fun PasscodeScreen(navController: NavController, context: Context) {
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.backspace),
-                        contentDescription = "Test"
+                        contentDescription = "Test",
                     )
                 }
             }
@@ -143,7 +165,7 @@ fun PasscodeScreen(navController: NavController, context: Context) {
             expanded = expanded,
             onDismissRequest = { expanded = false; },
             modifier = Modifier.width(200.dp),
-            offset = DpOffset(0.dp, -175.dp)
+            offset = DpOffset(0.dp, (-175).dp)
         ) {
             DropdownMenuItem(onClick = {
                 numOfDigits = 4
@@ -162,29 +184,28 @@ fun PasscodeScreen(navController: NavController, context: Context) {
         }
     }
 
-    if (currentIndex == numOfDigits && !isConfirmation) {
-        confirmPassword.addAll(password)
-        password.clear()
-        currentIndex = 0
-        isConfirmation = true
-        Log.d("confirm", isConfirmation.toString())
-    } else if (currentIndex == numOfDigits && isConfirmation) {
-        Log.d("confirm", "pass - ${password.toString()}, confPass - ${confirmPassword.toString()}")
-        if (password == confirmPassword) {
-            Log.d("confirm", "navigate")
-            navController.navigate("done")
-            val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
-            val editor = sharedPref.edit()
-            editor.putString("PASSWORD", password.toString())
-            editor.putBoolean("CREATED", true)
-            editor.apply()
-            isConfirmation = false
-        } else {
-            showDialog = true
+    val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+    val confirmPassword = sharedPref.getString("PASSWORD", "")
+
+    if (currentIndex == numOfDigits) {
+        if (password.toString() == confirmPassword && !isNavigated) {
+            if (navController.previousBackStackEntry == null) {
+                navController.navigate("main") {
+                    popUpTo("login") {
+                        inclusive = true
+                    }
+                }
+                isNavigated = true
+            } else {
+                navController.popBackStack()
+            }
             password.clear()
-            confirmPassword.clear()
             currentIndex = 0
-            isConfirmation = false
+        } else {
+            Log.d("login", navController.previousBackStackEntry.toString())
+            password.clear()
+            currentIndex = 0
+            showDialog = true
         }
     }
 
@@ -222,7 +243,6 @@ fun PasscodeScreen(navController: NavController, context: Context) {
             shape = RoundedCornerShape(10.dp),
             elevation = ButtonDefaults.elevation(0.dp, 0.dp),
             modifier = Modifier.padding(top = 31.dp),
-            enabled = !isConfirmation,
         ) {
             Text(
                 text = text,
@@ -241,7 +261,7 @@ fun PasscodeScreen(navController: NavController, context: Context) {
 
     //UI
     Scaffold(
-        topBar = { NavBack(navController = navController) },
+        topBar = { Row(modifier = Modifier.height(56.dp), content = { }) },
         backgroundColor = Color.White
     ) {
         Column(
@@ -252,15 +272,6 @@ fun PasscodeScreen(navController: NavController, context: Context) {
         ) {
             //Spacer(modifier = Modifier.height(100.dp))
             PassLoader(R.raw.password)
-            Text(
-                text = if (!isConfirmation) Data.setPasscodeHeaderText else Data.confirmPasscodeHeaderText,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = robotoFamily,
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(top = 12.dp, end = 12.dp)
-            )
             Text(
                 text = Data.passcodeMainText,
                 fontSize = 15.sp,
@@ -291,13 +302,11 @@ fun PasscodeScreen(navController: NavController, context: Context) {
                     }
                 }
             }
-            if (!isConfirmation) {
-                Row(modifier = Modifier.width(200.dp)) {
-                    if (expanded) {
-                        DropDownPasscode()
-                    }
-                    PasscodeButton(text = Data.passcodeButtonText)
+            Row(modifier = Modifier.width(200.dp)) {
+                if (expanded) {
+                    DropDownPasscode()
                 }
+                PasscodeButton(text = Data.passcodeButtonText)
             }
             Spacer(modifier = Modifier.height(16.dp))
             Row(
@@ -308,17 +317,5 @@ fun PasscodeScreen(navController: NavController, context: Context) {
                 PasscodeKeyboard()
             }
         }
-    }
-}
-
-@Composable
-fun PassLoader(res: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .width(100.dp)
-            .height(100.dp)
-    ) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(res))
-        LottieAnimation(composition = composition, clipSpec = LottieClipSpec.Progress(0f, .5f),  modifier = Modifier.weight(1f))
     }
 }

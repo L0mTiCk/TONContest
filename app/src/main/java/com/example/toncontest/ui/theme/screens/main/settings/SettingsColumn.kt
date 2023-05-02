@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.main.settings
 
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,7 +24,7 @@ import com.example.toncontest.ui.theme.screens.main.settings.components.ShowReco
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SettingsColumn(navController: NavController) {
+fun SettingsColumn(navController: NavController, context: Context) {
     LazyColumn(
         modifier = Modifier
             .padding(top = 20.dp)
@@ -68,7 +69,7 @@ fun SettingsColumn(navController: NavController) {
             PasscodeSetting(navController = navController)
         }
         item {
-            BiometricSetting()
+            BiometricSetting(context = context)
         }
         item {
             DeleteSetting(navController = navController)

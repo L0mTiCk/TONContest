@@ -18,4 +18,9 @@ object MainStrings {
     const val passcodeSettings = "Change passcode"
     const val biometricSettings = "Biometric Auth"
     const val deleteSettings = "Delete wallet"
+
+    //receive card
+    const val receiveHeaderText = "Receive TON"
+    const val receiveMainText = "Share this address with other TON wallet owners to receive TON from them."
+    const val shareButtonText = "Share Wallet Address"
 }

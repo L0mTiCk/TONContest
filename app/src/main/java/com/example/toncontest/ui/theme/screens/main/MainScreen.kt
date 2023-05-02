@@ -7,11 +7,14 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,10 +50,12 @@ import androidx.navigation.NavController
 import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
+import com.example.toncontest.ui.theme.components.main.CreatedWallet
 import com.example.toncontest.ui.theme.components.main.ReceiveButton
 import com.example.toncontest.ui.theme.components.main.SendButton
 import com.example.toncontest.ui.theme.components.main.TransactionColumn
 import com.example.toncontest.ui.theme.robotoFamily
+import com.example.toncontest.ui.theme.screens.main.receive.ReceiveCard
 import kotlinx.coroutines.delay
 
 @Composable
@@ -59,12 +64,15 @@ fun MainScreen(navController: NavController) {
     var isLoaded by remember { mutableStateOf(false)}
     var isAppeared by remember { mutableStateOf(false) }
     var isExpanded by remember { mutableStateOf(false) }
+    var isEmpty by remember { mutableStateOf(false) }
     val alfa by animateFloatAsState(targetValue = if (isExpanded) 1f else 0f)
     val max = 300.dp
     val min = 0.dp
     val (minPx, maxPx) = with(LocalDensity.current) {min to max}
     var expandedHeight by remember { mutableStateOf(300.dp) }
     val expandDp by animateDpAsState(targetValue = if(isExpanded) 0.dp else expandedHeight)
+
+    var isReceive by remember { mutableStateOf(false) }
 
     var balance = 52.0
     var balanceStr = balance.toString().split('.')
@@ -110,7 +118,10 @@ fun MainScreen(navController: NavController) {
             ) {
                 //TODO: link onclick func
                 IconButton(
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        /*TODO*/
+                        navController.navigate("login")
+                    }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.scan),
@@ -142,7 +153,15 @@ fun MainScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .alpha(1 - alfa)
-                        .height(expandDp),
+                        .height(expandDp)
+                        .clickable(
+                            onClick = {
+                                isReceive = false
+                            },
+                            interactionSource = remember { MutableInteractionSource()},
+                            indication = null
+                        ),
+
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -193,7 +212,7 @@ fun MainScreen(navController: NavController) {
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            ReceiveButton()
+                            ReceiveButton(onClick = {newReceive -> isReceive = newReceive})
                             Spacer(modifier = Modifier.width(12.dp))
                             SendButton()
                         }
@@ -221,12 +240,19 @@ fun MainScreen(navController: NavController) {
                                 }
                             }
                         )
-                        .clickable {
-                            if (isExpanded)
-                                expandedHeight = 300.dp
-                            isExpanded = !isExpanded
-                        }
-                        .background(Color.White, shape = RoundedCornerShape(12.dp)),
+                        .clickable (
+                            onClick = {
+                                if (isExpanded)
+                                    expandedHeight = 300.dp
+                                isExpanded = !isExpanded
+                            },
+                            interactionSource = remember { MutableInteractionSource()},
+                            indication = null
+                        )
+                        .background(
+                            Color.White,
+                            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                        ),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -258,10 +284,24 @@ fun MainScreen(navController: NavController) {
                         ),
                         exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing))
                     ) {
-                        //CreatedWallet()
-                        TransactionColumn()
+                        if (isEmpty)
+                            CreatedWallet()
+                        else
+                            TransactionColumn()
+
                     }
                 }
+            }
+            AnimatedVisibility(
+                visible = isReceive,
+                enter = slideInVertically(
+                    initialOffsetY = { 1300 }
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { 1500 }
+                )
+            ) {
+                ReceiveCard(onDrag = {newReceive -> isReceive = newReceive})
             }
         }
     )
