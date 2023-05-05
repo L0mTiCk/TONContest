@@ -5,11 +5,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,8 +35,9 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPref = this.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+        sharedPref.edit().clear().apply()
         val isWalletCreated = sharedPref.getBoolean("CREATED", false)
-        val startDestination = if (isWalletCreated) "login" else "start"
+        val startDestination = if (isWalletCreated) "done" else "done"
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
         setContent {
             val navController = rememberNavController()
@@ -53,11 +52,14 @@ class MainActivity : FragmentActivity() {
                         description = "",
                         negativeText = "Cancel",
                         onSuccess = {
-                            navController.navigate("main") {
-                                popUpTo("login") {
-                                    inclusive = true
+                            if (navController.previousBackStackEntry == null)
+                                navController.navigate("main") {
+                                    popUpTo("login") {
+                                        inclusive = true
+                                    }
                                 }
-                            }
+                            else
+                                navController.popBackStack()
                         },
                         onError = { _, _ ->
 
@@ -109,7 +111,8 @@ class MainActivity : FragmentActivity() {
         super.onResume()
         val sharedPref = this.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
-        navigateFunction?.invoke(true)
+        val isCreated = sharedPref.getBoolean("CREATED", false)
+        navigateFunction?.invoke(isCreated)
         if (isBiometric)
             biometricFunction?.invoke(true)
     }
@@ -118,16 +121,5 @@ class MainActivity : FragmentActivity() {
     }
     fun setBiometricFunction(navigate: (Boolean) -> Unit) {
         biometricFunction = navigate
-    }
-}
-
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TONContestTheme {
-
     }
 }

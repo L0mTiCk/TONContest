@@ -23,4 +23,15 @@ object MainStrings {
     const val receiveHeaderText = "Receive TON"
     const val receiveMainText = "Share this address with other TON wallet owners to receive TON from them."
     const val shareButtonText = "Share Wallet Address"
+
+    //transaction card
+    const val transactionCardHeader = "Transaction"
+    const val transactionDetailsHeader = "Details"
+    const val transactionCardSenderTitle = "Sender"
+    const val transactionCardRecipientTitle = "Recipient"
+    const val transactionIdDetailsTitle = "Transaction"
+    const val transactionDnsTitle = "Recipient"
+    const val transactionExplorerTitle = "View in explorer"
+    const val transactionSendButtonTitle = "Send TON to this address"
+
 }

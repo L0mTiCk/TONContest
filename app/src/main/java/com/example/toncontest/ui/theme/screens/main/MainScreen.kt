@@ -53,7 +53,8 @@ import com.example.toncontest.data.Data
 import com.example.toncontest.ui.theme.components.main.CreatedWallet
 import com.example.toncontest.ui.theme.components.main.ReceiveButton
 import com.example.toncontest.ui.theme.components.main.SendButton
-import com.example.toncontest.ui.theme.components.main.TransactionColumn
+import com.example.toncontest.ui.theme.components.main.transaction.TransactionCard
+import com.example.toncontest.ui.theme.components.main.transaction.TransactionColumn
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.main.receive.ReceiveCard
 import kotlinx.coroutines.delay
@@ -73,6 +74,8 @@ fun MainScreen(navController: NavController) {
     val expandDp by animateDpAsState(targetValue = if(isExpanded) 0.dp else expandedHeight)
 
     var isReceive by remember { mutableStateOf(false) }
+    var transactionCardId by remember { mutableStateOf(0) }
+    var showTransactionCard by remember { mutableStateOf(false) }
 
     var balance = 52.0
     var balanceStr = balance.toString().split('.')
@@ -157,6 +160,7 @@ fun MainScreen(navController: NavController) {
                         .clickable(
                             onClick = {
                                 isReceive = false
+                                showTransactionCard = false
                             },
                             interactionSource = remember { MutableInteractionSource()},
                             indication = null
@@ -287,8 +291,10 @@ fun MainScreen(navController: NavController) {
                         if (isEmpty)
                             CreatedWallet()
                         else
-                            TransactionColumn()
-
+                            TransactionColumn() { id ->
+                                transactionCardId = id!!
+                                showTransactionCard = true
+                            }
                     }
                 }
             }
@@ -302,6 +308,18 @@ fun MainScreen(navController: NavController) {
                 )
             ) {
                 ReceiveCard(onDrag = {newReceive -> isReceive = newReceive})
+            }
+            AnimatedVisibility(
+                visible = showTransactionCard,
+                enter = slideInVertically(
+                    initialOffsetY = { 1300 }
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { 1500 }
+                )
+            ) {
+                isExpanded = false
+                TransactionCard(onDrag = {newReceive -> showTransactionCard = newReceive}, transactionCardId - 1)
             }
         }
     )

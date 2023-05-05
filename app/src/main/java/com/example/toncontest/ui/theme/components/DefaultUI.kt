@@ -150,8 +150,18 @@ fun Loader(res: Int, modifier: Modifier = Modifier.width(100.dp).height(100.dp))
 
 
 @Composable
-fun BackgroundButton(text: String, backColor: Color, textColor: Color = Color.White, navController: NavController, route: String){
-    Button(onClick = { navController.navigate(route) },
+fun BackgroundButton(text: String, backColor: Color, textColor: Color = Color.White, navController: NavController, route: String, isPopUp: Boolean = false, popUpRoute: String = ""){
+    Button(onClick = {
+        if (isPopUp) {
+            navController.navigate(route) {
+                popUpTo(popUpRoute) {
+                    inclusive = true
+                }
+            }
+        } else {
+            navController.navigate(route)
+        }
+    },
         colors = ButtonDefaults.buttonColors(backgroundColor = backColor),
         shape = RoundedCornerShape(10.dp),
         elevation = ButtonDefaults.elevation(0.dp, 0.dp)

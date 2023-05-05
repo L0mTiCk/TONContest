@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.TonGray
+import com.example.toncontest.ui.theme.components.main.ShareButton
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable

@@ -66,7 +66,9 @@ fun DoneScreen(navController: NavController){
                 backColor = Light_Blue,
                 //TODO: Change route to main app
                 route = "main",
-                navController = navController
+                navController = navController,
+                isPopUp = true,
+                popUpRoute = "done"
             )
             Spacer(modifier = Modifier.height(117.dp))
         }

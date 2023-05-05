@@ -1,4 +1,4 @@
-package com.example.toncontest.ui.theme.components.main
+package com.example.toncontest.ui.theme.components.main.transaction
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -14,11 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.toncontest.data.main.returnRandomCards
+import com.example.toncontest.ui.theme.components.main.TransactionColumnCard
 import com.example.toncontest.ui.theme.robotoFamily
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TransactionColumn() {
+fun TransactionColumn(returnId: (result: Int?) -> Unit) {
     val grouped = returnRandomCards()
     LazyColumn(
         modifier = Modifier
@@ -45,7 +46,10 @@ fun TransactionColumn() {
                     time = card.time,
                     address = card.address,
                     fee = card.fee.toBigDecimal().toPlainString(),
-                    message = card.message
+                    message = card.message,
+                    onClick = {
+                        returnId(card.id)
+                    }
                 )
             }
         }

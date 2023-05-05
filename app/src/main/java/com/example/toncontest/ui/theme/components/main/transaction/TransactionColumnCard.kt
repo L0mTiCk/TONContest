@@ -2,6 +2,7 @@ package com.example.toncontest.ui.theme.components.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,12 +28,15 @@ import com.example.toncontest.ui.theme.TonRed
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
-fun TransactionColumnCard (amount: Float, isIncome: Boolean, time: String, address: String, fee: String, message: String) {
+fun TransactionColumnCard (amount: Float, isIncome: Boolean, time: String, address: String, fee: String, message: String, onClick: () -> Unit) {
     val textColor = if (isIncome) TonGreen else TonRed
     val amountString = amount.toString().split('.')
     Row(modifier = Modifier
         .padding(top = 0.dp)
         .fillMaxWidth()
+        .clickable {
+            onClick()
+        }
     ) {
         Column(modifier = Modifier.weight(9f)) {
             Row(
