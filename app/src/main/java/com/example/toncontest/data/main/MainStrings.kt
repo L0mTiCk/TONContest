@@ -5,6 +5,10 @@ object MainStrings {
     const val sendButton = "Send"
     const val walletCreatedMain = "Wallet Created"
     const val walletCreatedSubtitle = "Your wallet address"
+    const val topBarNetwork = "Waiting for network..."
+    const val topBarConnection = "Connecting..."
+    const val topBarUpdate = "Updating..."
+
 
     //settings screen
     const val walletSettings = "Wallet Settings"

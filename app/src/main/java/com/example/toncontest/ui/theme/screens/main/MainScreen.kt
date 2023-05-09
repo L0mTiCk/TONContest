@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.main
 
+import TopBarConnection
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -57,6 +58,7 @@ import com.example.toncontest.ui.theme.components.main.transaction.TransactionCa
 import com.example.toncontest.ui.theme.components.main.transaction.TransactionColumn
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.main.receive.ReceiveCard
+import com.example.toncontest.ui.theme.components.main.topbar.main.TopBarBalance
 import kotlinx.coroutines.delay
 
 @Composable
@@ -66,7 +68,7 @@ fun MainScreen(navController: NavController) {
     var isAppeared by remember { mutableStateOf(false) }
     var isExpanded by remember { mutableStateOf(false) }
     var isEmpty by remember { mutableStateOf(false) }
-    val alfa by animateFloatAsState(targetValue = if (isExpanded) 1f else 0f)
+    val alpha by animateFloatAsState(targetValue = if (isExpanded) 1f else 0f)
     val max = 300.dp
     val min = 0.dp
     val (minPx, maxPx) = with(LocalDensity.current) {min to max}
@@ -80,39 +82,24 @@ fun MainScreen(navController: NavController) {
     var balance = 52.0
     var balanceStr = balance.toString().split('.')
 
+    var hasConnection by remember { mutableStateOf(true) }
+
+
+    //test
+    LaunchedEffect(key1 = Unit) {
+        delay(10000)
+        hasConnection = false
+    }
+
     Scaffold(
         backgroundColor = Color.Black,
 
         topBar = {
-            Row(modifier = Modifier
-                .height(56.dp)
-                .alpha(alfa)) {
-                Column(modifier = Modifier.padding(start = 16.dp, top = 7.dp)) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Loader(R.raw.start, modifier = Modifier
-                            .width(14.dp)
-                            .height(14.dp))
-                        Text(
-                            text = balance.toString(),
-                            fontFamily = robotoFamily,
-                            fontSize =18.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.White,
-                            modifier = Modifier.padding(start = 2.dp)
-                        )
-                    }
-                    Text(
-                        text = "≈ \$89.6",
-                        fontFamily = robotoFamily,
-                        fontSize =14.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color.LightGray,
-                        modifier = Modifier.padding(start = 2.dp)
-                    )
+                if (hasConnection) {
+                    TopBarBalance(balance = balance, alpha = alpha)
+                } else {
+                    TopBarConnection(alpha = alpha, updated = { hasConnection = it})
                 }
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,14 +142,14 @@ fun MainScreen(navController: NavController) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .alpha(1 - alfa)
+                        .alpha(1 - alpha)
                         .height(expandDp)
                         .clickable(
                             onClick = {
                                 isReceive = false
                                 showTransactionCard = false
                             },
-                            interactionSource = remember { MutableInteractionSource()},
+                            interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ),
 
@@ -244,13 +231,13 @@ fun MainScreen(navController: NavController) {
                                 }
                             }
                         )
-                        .clickable (
+                        .clickable(
                             onClick = {
                                 if (isExpanded)
                                     expandedHeight = 300.dp
                                 isExpanded = !isExpanded
                             },
-                            interactionSource = remember { MutableInteractionSource()},
+                            interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         )
                         .background(
