@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +37,7 @@ import com.example.toncontest.ui.theme.Light_Gray
 import com.example.toncontest.ui.theme.TonGray
 import com.example.toncontest.ui.theme.TonGreen
 import com.example.toncontest.ui.theme.TonRed
+import com.example.toncontest.ui.theme.components.main.CardTitle
 import com.example.toncontest.ui.theme.components.main.transaction.details.DetailsAddressField
 import com.example.toncontest.ui.theme.components.main.transaction.details.DnsField
 import com.example.toncontest.ui.theme.components.main.transaction.details.SendToAddressButton
@@ -51,7 +51,8 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
     val transaction = cardList[transactionId]
     val amountColor = if (transaction.isIncome) TonGreen else TonRed
     val amountString = transaction.amount.toString().split('.')
-    val addressType = if (transaction.isIncome) MainStrings.transactionCardSenderTitle else MainStrings.transactionCardRecipientTitle
+    val addressType =
+        if (transaction.isIncome) MainStrings.transactionCardSenderTitle else MainStrings.transactionCardRecipientTitle
     val address = transaction.address
     val dns = transaction.dns
     var status by remember { mutableStateOf(0) }
@@ -81,14 +82,7 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = MainStrings.transactionCardHeader,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = robotoFamily,
-                modifier = Modifier
-                    .padding(start = 20.dp, top = 16.dp)
-            )
+            CardTitle(text = MainStrings.transactionCardHeader)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -96,8 +90,11 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(painter = painterResource(id = R.drawable.diamond), contentDescription = "Diamond", modifier = Modifier
-                    .size(44.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.diamond),
+                    contentDescription = "Diamond",
+                    modifier = Modifier
+                        .size(44.dp)
                 )
                 Text(
                     text = buildAnnotatedString {
@@ -121,7 +118,7 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
                                 append(".${amountString[1]}")
                             }
                         }
-                }
+                    }
 
                 )
             }
@@ -142,6 +139,7 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
                         modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
                     )
                 }
+
                 0 -> {
                     Row(
                         modifier = Modifier.padding(top = 4.dp, bottom = 16.dp),
@@ -162,7 +160,8 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
                         )
                     }
                 }
-                1-> {
+
+                1 -> {
                     Text(
                         text = "(TODO: date) at ${transaction.time}",
                         color = TonGray,
@@ -198,22 +197,24 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
                     )
                 }
             }
-            Text(
-                text = MainStrings.transactionDetailsHeader,
-                color = Light_Blue,
-                fontFamily = robotoFamily,
-                fontSize = 15.sp,
-                modifier = Modifier
-                    .padding(top = 32.dp, start = 20.dp)
-                    .fillMaxWidth()
-            )
-            if (!transaction.isIncome) {
-                DnsField(dns = dns)
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                Text(
+                    text = MainStrings.transactionDetailsHeader,
+                    color = Light_Blue,
+                    fontFamily = robotoFamily,
+                    fontSize = 15.sp,
+                    modifier = Modifier
+                        .padding(top = 32.dp)
+                        .fillMaxWidth()
+                )
+                if (!transaction.isIncome) {
+                    DnsField(dns = dns)
+                }
+                DetailsAddressField(addressType = addressType, address = address)
+                //TODO: change to real transaction id!!
+                TransactionIdField(id = "7HxFi5…JpHcU=")
+                ViewInExplorerField()
             }
-            DetailsAddressField(addressType = addressType, address = address)
-            //TODO: change to real transaction id!!
-            TransactionIdField(id = "7HxFi5…JpHcU=")
-            ViewInExplorerField()
             SendToAddressButton(address = address)
         }
     }

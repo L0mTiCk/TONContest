@@ -17,6 +17,10 @@ import com.example.toncontest.data.start.Biometric
 import com.example.toncontest.ui.theme.TONContestTheme
 import com.example.toncontest.ui.theme.screens.main.LogInScreen
 import com.example.toncontest.ui.theme.screens.main.MainScreen
+import com.example.toncontest.ui.theme.screens.main.send.SendAmountScreen
+import com.example.toncontest.ui.theme.screens.main.send.SendConfirmScreen
+import com.example.toncontest.ui.theme.screens.main.send.SendFinalScreen
+import com.example.toncontest.ui.theme.screens.main.send.SendStartScreen
 import com.example.toncontest.ui.theme.screens.main.settings.SettingsScreen
 import com.example.toncontest.ui.theme.screens.start.RecoveryScreen
 import com.example.toncontest.ui.theme.screens.start.DoneScreen
@@ -37,7 +41,7 @@ class MainActivity : FragmentActivity() {
         val sharedPref = this.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
         sharedPref.edit().clear().apply()
         val isWalletCreated = sharedPref.getBoolean("CREATED", false)
-        val startDestination = if (isWalletCreated) "done" else "done"
+        val startDestination = if (isWalletCreated) "main" else "main"
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
         setContent {
             val navController = rememberNavController()
@@ -100,6 +104,10 @@ class MainActivity : FragmentActivity() {
                             composable(route = "main") { MainScreen(navController = navController) }
                             composable(route = "settings") { SettingsScreen(navController = navController, context = this@MainActivity) }
                             composable(route = "login") { LogInScreen( navController = navController, context = this@MainActivity) }
+                            composable(route = "sendStart") { SendStartScreen(navController = navController) }
+                            composable(route = "sendAmount") { SendAmountScreen(navController = navController) }
+                            composable(route = "sendConfirm") { SendConfirmScreen(navController = navController) }
+                            composable(route = "sendPending") { SendFinalScreen(navController = navController) }
                         }
                     }
                 }

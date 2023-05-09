@@ -16,12 +16,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.TonGray
+import com.example.toncontest.ui.theme.components.main.CardTitle
 import com.example.toncontest.ui.theme.components.main.ShareButton
 import com.example.toncontest.ui.theme.robotoFamily
 
@@ -45,7 +45,7 @@ fun ReceiveCard(onDrag: (Boolean) -> Unit) {
                 )
                 .draggable(
                     state = rememberDraggableState(onDelta = {}),
-                    onDragStopped = {velocity ->
+                    onDragStopped = { velocity ->
                         if (velocity > 0)
                             onDrag(false)
                     },
@@ -53,14 +53,7 @@ fun ReceiveCard(onDrag: (Boolean) -> Unit) {
                 ),
             verticalArrangement = Arrangement.Bottom
         ) {
-            Text(
-                text = MainStrings.receiveHeaderText,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = robotoFamily,
-                modifier = Modifier
-                    .padding(start = 20.dp, top = 16.dp)
-            )
+            CardTitle(text = MainStrings.receiveHeaderText)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

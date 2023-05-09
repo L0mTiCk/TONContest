@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.components.main.transaction.details
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,7 @@ import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
 fun DetailsAddressField(addressType: String, address: String) {
-    Row(
+    Column(
         modifier = Modifier
             .padding(top = 4.dp)
             .fillMaxWidth()
@@ -28,14 +29,14 @@ fun DetailsAddressField(addressType: String, address: String) {
                 fontFamily = robotoFamily,
                 fontSize = 15.sp,
                 modifier = Modifier
-                    .padding(vertical = 14.dp, horizontal = 20.dp)
+                    .padding(vertical = 14.dp)
             )
             Text(
                 text = address.substring(0, 4) + "..." + address.substring(address.length - 4),
                 fontFamily = robotoFamily,
                 fontSize = 15.sp,
                 modifier = Modifier
-                    .padding(vertical = 14.dp, horizontal = 20.dp)
+                    .padding(vertical = 14.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.End
             )

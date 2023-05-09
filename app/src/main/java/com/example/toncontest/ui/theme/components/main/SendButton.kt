@@ -16,15 +16,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
-fun SendButton(){
+fun SendButton(navController: NavController, isLoaded: Boolean){
     Button(
-        onClick = { /*TODO*/ },
+        onClick = {
+            if(isLoaded)
+                  navController.navigate("sendStart")
+        },
         colors = ButtonDefaults.buttonColors(backgroundColor = Light_Blue),
         shape = RoundedCornerShape(10.dp),
         elevation = ButtonDefaults.elevation(0.dp, 0.dp),

@@ -48,7 +48,6 @@ fun PasscodeScreen(navController: NavController, context: Context) {
             var backColor = if (index != -2) Light_Gray else Color.Transparent
             Button(
                 onClick = {
-                    //TODO: make this shit working
                     if (currentIndex < numOfDigits) {
                         password.add(index)
                         currentIndex++

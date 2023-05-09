@@ -218,7 +218,7 @@ fun MainScreen(navController: NavController) {
                         ) {
                             ReceiveButton(onClick = {newReceive -> isReceive = newReceive})
                             Spacer(modifier = Modifier.width(12.dp))
-                            SendButton()
+                            SendButton(navController = navController, isLoaded = isLoaded)
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -299,7 +299,7 @@ fun MainScreen(navController: NavController) {
                 }
             }
             AnimatedVisibility(
-                visible = isReceive,
+                visible = isReceive && isLoaded,
                 enter = slideInVertically(
                     initialOffsetY = { 1300 }
                 ),
@@ -315,9 +315,10 @@ fun MainScreen(navController: NavController) {
                     initialOffsetY = { 1300 }
                 ),
                 exit = slideOutVertically(
-                    targetOffsetY = { 1500 }
+                    targetOffsetY = { 1900 }
                 )
             ) {
+                expandedHeight = 300.dp
                 isExpanded = false
                 TransactionCard(onDrag = {newReceive -> showTransactionCard = newReceive}, transactionCardId - 1)
             }
