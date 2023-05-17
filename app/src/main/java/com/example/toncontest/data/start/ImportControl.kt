@@ -1,6 +1,7 @@
-package com.example.toncontest.data
+package com.example.toncontest.data.start
 
 import android.util.Log
+import com.example.toncontest.data.Data
 
 fun importCheck(): Boolean{
     Log.d("import", Data.importMnemonic.toString())

@@ -1,6 +1,8 @@
 package com.example.toncontest.ui.theme.screens.main
 
 import TopBarConnection
+import android.content.Context
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -51,6 +53,8 @@ import androidx.navigation.NavController
 import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
+import com.example.toncontest.data.ton.account.Account
+import com.example.toncontest.data.ton.account.getAccount
 import com.example.toncontest.ui.theme.components.main.CreatedWallet
 import com.example.toncontest.ui.theme.components.main.ReceiveButton
 import com.example.toncontest.ui.theme.components.main.SendButton
@@ -59,36 +63,60 @@ import com.example.toncontest.ui.theme.components.main.transaction.TransactionCo
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.main.receive.ReceiveCard
 import com.example.toncontest.ui.theme.components.main.topbar.main.TopBarBalance
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.ton.block.Coins
+import org.ton.block.VarUInteger
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, context: Context) {
     Data.isFirstLaunch = false
-    var isLoaded by remember { mutableStateOf(false)}
+    var isLoaded by remember { mutableStateOf(false) }
     var isAppeared by remember { mutableStateOf(false) }
     var isExpanded by remember { mutableStateOf(false) }
     var isEmpty by remember { mutableStateOf(false) }
     val alpha by animateFloatAsState(targetValue = if (isExpanded) 1f else 0f)
     val max = 300.dp
     val min = 0.dp
-    val (minPx, maxPx) = with(LocalDensity.current) {min to max}
+    val (minPx, maxPx) = with(LocalDensity.current) { min to max }
     var expandedHeight by remember { mutableStateOf(300.dp) }
-    val expandDp by animateDpAsState(targetValue = if(isExpanded) 0.dp else expandedHeight)
+    val expandDp by animateDpAsState(targetValue = if (isExpanded) 0.dp else expandedHeight)
 
     var isReceive by remember { mutableStateOf(false) }
     var transactionCardId by remember { mutableStateOf(0) }
     var showTransactionCard by remember { mutableStateOf(false) }
 
-    var balance = 52.0
+    var balance by remember { mutableStateOf(0.0) }
     var balanceStr = balance.toString().split('.')
 
     var hasConnection by remember { mutableStateOf(true) }
 
+    var account by remember {
+        mutableStateOf(
+            Account(
+                "WasdWasdWasdWasdWasdWasdWasdWasdWasdWasdWasdWasd",
+                Coins(VarUInteger(0))
+            )
+        )
+    }
 
     //test
     LaunchedEffect(key1 = Unit) {
         delay(10000)
         hasConnection = false
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            account = getAccount(context = context)
+            Log.d("Balance", account.balance.toString())
+            balanceStr = account.balance.toString().split(".")
+            isLoaded = true
+            delay(120)
+            isAppeared = true
+        }
     }
 
     Scaffold(
@@ -162,12 +190,15 @@ fun MainScreen(navController: NavController) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            //TODO: change to wallet address
-                            text = "Wallet address",
+                            text = account.address.substring(0, 6) + "..." + account.address.substring(account.address.length - 6),
                             fontFamily = robotoFamily,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.White
+                            color = Color.White,
+                            modifier = Modifier
+                                .alpha(
+                                    animateFloatAsState(targetValue = if (isAppeared) 1f else 0f).value
+                                )
                         )
                         Row(
                             modifier = Modifier.height(56.dp),
@@ -191,6 +222,10 @@ fun MainScreen(navController: NavController) {
                                 fontSize = 44.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
+                                modifier = Modifier
+                                    .alpha(
+                                        animateFloatAsState(targetValue = if (isAppeared) 1f else 0f).value
+                                    )
                             )
                         }
                     }
@@ -247,12 +282,6 @@ fun MainScreen(navController: NavController) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    LaunchedEffect(key1 = Unit) {
-                        delay(1000)
-                        isLoaded = true
-                        delay(120)
-                        isAppeared = true
-                    }
                     AnimatedVisibility(
                         visible = !isLoaded,
                         enter = fadeIn(

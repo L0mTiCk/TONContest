@@ -91,7 +91,7 @@ class MainActivity : FragmentActivity() {
                         NavHost(navController = navController, startDestination = startDestination) {
                             composable(route = "start") { StartScreen(navController = navController) }
                             composable(route = "congrats") { CongratsScreen(navController = navController) }
-                            composable(route = "recovery") { RecoveryScreen(navController = navController, Data.isFirstLaunch) }
+                            composable(route = "recovery") { RecoveryScreen(navController = navController, Data.isFirstLaunch, context = this@MainActivity) }
                             composable(route = "testing") { TestingScreen(navController = navController) }
                             composable(route = "success") { SuccessScreen(navController = navController, context = context) }
                             composable(route = "passcode") { PasscodeScreen(navController = navController, this@MainActivity) }
@@ -101,7 +101,7 @@ class MainActivity : FragmentActivity() {
                             composable(route = "done") { DoneScreen(navController = navController) }
 
                             //TODO: redo to another activity launch
-                            composable(route = "main") { MainScreen(navController = navController) }
+                            composable(route = "main") { MainScreen(navController = navController, context = this@MainActivity) }
                             composable(route = "settings") { SettingsScreen(navController = navController, context = this@MainActivity) }
                             composable(route = "login") { LogInScreen( navController = navController, context = this@MainActivity) }
                             composable(route = "sendStart") { SendStartScreen(navController = navController) }

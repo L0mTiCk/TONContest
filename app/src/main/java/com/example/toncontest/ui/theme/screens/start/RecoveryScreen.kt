@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.start
 
+import android.content.Context
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
 import com.example.toncontest.data.congrats.setEntryTime
+import com.example.toncontest.data.ton.mnemonic.getMnemonic
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.ButtonWithAlertDialog
@@ -30,7 +32,7 @@ import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.ui.theme.screens.NavBack
 
 @Composable
-fun RecoveryScreen(navController: NavController, isFirstLaunch: Boolean) {
+fun RecoveryScreen(navController: NavController, isFirstLaunch: Boolean, context: Context) {
     //set entry time
     setEntryTime()
     var scrollState = rememberScrollState()
@@ -69,7 +71,7 @@ fun RecoveryScreen(navController: NavController, isFirstLaunch: Boolean) {
                 DefaultText(text = Data.recoveryMainText, fontFamily = robotoFamily, textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium, fontSize = 15.sp , width = 280.dp)
                 MnemonicPhrases(
-                    mnemonics = Data.testMnemonic
+                    mnemonics = getMnemonic(context = context)
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 if (isFirstLaunch) {

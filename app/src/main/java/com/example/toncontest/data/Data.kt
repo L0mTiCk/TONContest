@@ -1,37 +1,12 @@
 package com.example.toncontest.data
 
 import com.example.toncontest.data.testing.mnemonicRandom
+import com.example.toncontest.data.ton.mnemonic.genMnemonic
 
 object Data {
     var isFirstLaunch = true
 
-    val testMnemonic = mutableListOf(
-        "alfa",
-        "beta",
-        "wolf",
-        "computer",
-        "man",
-        "angel",
-        "truck",
-        "clown",
-        "oxygen",
-        "gamma",
-        "crate",
-        "box",
-        "apple",
-        "cherry",
-        "pop",
-        "balloon",
-        "mixer",
-        "banana",
-        "potato",
-        "desk",
-        "oak",
-        "pine",
-        "burch",
-        "dirt"
-    )
-    var mnemonic0: MutableList<String> = testMnemonic
+    lateinit var mnemonic0: List<String>
 
     //start screen
     val startHeaderText = "TON Wallet"

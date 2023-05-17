@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
-import com.example.toncontest.data.importCheck
+import com.example.toncontest.data.start.importCheck
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.DefaultText

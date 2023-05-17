@@ -49,6 +49,8 @@ android {
 dependencies {
     def nav_version = "2.5.3"
 
+    implementation("org.ton:ton-kotlin:0.2.16")
+
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-RC")
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
