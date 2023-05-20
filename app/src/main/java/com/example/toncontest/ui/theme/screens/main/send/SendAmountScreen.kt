@@ -30,7 +30,11 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -47,6 +51,8 @@ import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.Data
 import com.example.toncontest.data.main.MainStrings
+import com.example.toncontest.data.main.send.sendInfo
+import com.example.toncontest.data.ton.account.account
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.Light_Gray
 import com.example.toncontest.ui.theme.TonGray
@@ -56,12 +62,11 @@ import com.example.toncontest.ui.theme.components.main.transaction.send.SendCard
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
-fun SendAmountScreen(navController: NavController, tempAddress: String = "") {
-    //TODO: change to real address value
-    val address = "UQBFsF6_masda_3tE_yRUoqU96asdxuZSP8577EOvo_1234"
+fun SendAmountScreen(navController: NavController) {
+    val address = sendInfo.recipient
     val dns = "andre.ton"
     val isDns = true
-    val balance = 52.323
+    val balance = account.balance.toString().toDouble()
     var amount by remember { mutableStateOf(0.0) }
     var amountStr by remember { mutableStateOf(mutableListOf("0", "0")) }
     var checked by remember { mutableStateOf(false) }
@@ -70,6 +75,7 @@ fun SendAmountScreen(navController: NavController, tempAddress: String = "") {
 
     LaunchedEffect(key1 = amount) {
         amountStr = amount.toString().split(".") as MutableList<String>
+        sendInfo.amount = amount
     }
 
     @Composable
@@ -335,7 +341,7 @@ fun SendAmountScreen(navController: NavController, tempAddress: String = "") {
                         )
                     )
                 }
-                ContinueButton(navController = navController, error = {}, route = "sendConfirm")
+                ContinueButton(navController = navController, error = {}, route = "sendConfirm", 2)
                 Spacer(modifier = Modifier.height(16.dp))
                 PasscodeKeyboard()
             }

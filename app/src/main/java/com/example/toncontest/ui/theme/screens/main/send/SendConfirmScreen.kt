@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.main.send
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -50,9 +51,10 @@ import com.example.toncontest.ui.theme.robotoFamily
 
 
 @Composable
-fun SendConfirmScreen(navController: NavController) {
-    var comment by remember { mutableStateOf("") }
+fun SendConfirmScreen(navController: NavController, isBlocked: Boolean = false) {
+    var comment by remember { mutableStateOf(sendInfo.comment) }
     var isOverflowed by remember { mutableStateOf(false) }
+
     fun buildAnnotatedStringWithColors(text: String): AnnotatedString {
         val builder = AnnotatedString.Builder()
         if (text.length <= Variables.sendConfirmInputLen) {
@@ -124,8 +126,12 @@ fun SendConfirmScreen(navController: NavController) {
                 )
                 TextField(
                     value = comment,
+                    //костыль, не редактируется текст комментария (при отправке все равно будет из ссылки)
+                    readOnly = isBlocked,
                     onValueChange = { it ->
                         comment = it
+                        sendInfo.comment = it
+                        Log.d("transactions", "Transaction comment = ${sendInfo.comment}")
                     },
                     maxLines = 5,
                     visualTransformation = {
@@ -183,7 +189,7 @@ fun SendConfirmScreen(navController: NavController) {
                 SendDetailsAmount()
                 SendDetailsFee()
                 Spacer(modifier = Modifier.weight(1f))
-                ContinueButton(navController = navController, error = {}, route = "sendPending", mode = 1)
+                ContinueButton(navController = navController, error = {}, route = "sendFinal", mode = 3)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }

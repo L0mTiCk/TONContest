@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.toncontest"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -66,6 +66,11 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    //QR Scanner + generator
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation("io.github.g00fy2.quickie:quickie-bundled:1.6.0")
+    //implementation("io.github.g0dkar:qrcode-kotlin-android:3.3.0")
 
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
     implementation "com.airbnb.android:lottie-compose:6.0.0"

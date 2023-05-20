@@ -64,7 +64,6 @@ fun DoneScreen(navController: NavController){
             BackgroundButton(
                 text = Data.doneButtonText,
                 backColor = Light_Blue,
-                //TODO: Change route to main app
                 route = "main",
                 navController = navController,
                 isPopUp = true,

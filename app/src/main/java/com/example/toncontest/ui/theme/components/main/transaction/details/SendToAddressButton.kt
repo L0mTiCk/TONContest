@@ -11,14 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.ui.theme.Light_Blue
 
 @Composable
-fun SendToAddressButton(address: String) {
+fun SendToAddressButton(address: String, navController: NavController) {
     Button(
         onClick = {
-            //TODO: navigate to send screen with this address
+            navController.navigate("sendStart/${address}")
         },
         modifier = Modifier
             .padding(

@@ -15,7 +15,7 @@ import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
 fun RecentTransaction(address: (String) -> Unit) {
-    val lastTransaction = cardList.last()
+    val lastTransaction = cardList.first()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +32,7 @@ fun RecentTransaction(address: (String) -> Unit) {
                 .padding(top = 13.dp)
         )
         Text(
-            text = lastTransaction.time,
+            text = lastTransaction.date,
             fontSize = 16.sp,
             fontFamily = robotoFamily,
             color = TonGray,

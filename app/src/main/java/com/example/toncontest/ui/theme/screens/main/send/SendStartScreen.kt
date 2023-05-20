@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.data.main.MainStrings
+import com.example.toncontest.data.main.cardList
+import com.example.toncontest.data.main.send.sendInfo
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.TonGray
 import com.example.toncontest.ui.theme.components.main.CardTitle
@@ -49,6 +51,8 @@ fun SendStartScreen(navController: NavController ,address: String = "", id: Int 
     val keyboardController = LocalSoftwareKeyboardController.current
     var isError by remember { mutableStateOf(false) }
     var visibility by remember { mutableStateOf(false) }
+    var sendAddress by remember { mutableStateOf(address) }
+    var hasRecent by remember { mutableStateOf(cardList.isNotEmpty()) }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -57,14 +61,19 @@ fun SendStartScreen(navController: NavController ,address: String = "", id: Int 
     }
 
     LaunchedEffect(isError) {
-        visibility = true
-        delay(5000)
-        visibility = false
-        isError = false
+        if (isError) {
+            visibility = true
+            delay(4500)
+            visibility = false
+            isError = false
+        }
     }
 
-    var sendAddress by remember { mutableStateOf(address) }
-    var hasRecent by remember { mutableStateOf(true) }
+    LaunchedEffect(key1 = sendAddress) {
+        sendInfo.recipient = sendAddress
+    }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -95,7 +104,6 @@ fun SendStartScreen(navController: NavController ,address: String = "", id: Int 
                 )
                 TextField(
                     value = sendAddress,
-                    singleLine = true,
                     onValueChange = {
                         sendAddress = it
                     },
@@ -131,7 +139,7 @@ fun SendStartScreen(navController: NavController ,address: String = "", id: Int 
                 ) {
                     PasteButton(paste = { newAddress -> sendAddress = newAddress })
                     Spacer(modifier = Modifier.width(8.dp))
-                    ScanButton(navController = navController)
+                    ScanButton(navController = navController, {newAddress -> sendAddress = newAddress})
                 }
                 if (hasRecent) {
                     Text(
@@ -142,14 +150,23 @@ fun SendStartScreen(navController: NavController ,address: String = "", id: Int 
                         modifier = Modifier
                             .padding(top = 32.dp)
                     )
-                    RecentTransaction(address = { recentAddress -> sendAddress = recentAddress })
+                    RecentTransaction(address = { recentAddress ->
+                        sendAddress = recentAddress
+                    })
                 }
             }
             Column(
-                modifier = Modifier.padding(horizontal = 20.dp).fillMaxSize(),
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.Bottom
             ) {
-                ContinueButton(navController = navController, {}, "sendAmount")
+                ContinueButton(
+                    navController = navController,
+                    { error -> isError = error },
+                    "sendAmount",
+                    1
+                )
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }

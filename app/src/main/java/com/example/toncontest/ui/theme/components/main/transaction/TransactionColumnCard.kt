@@ -1,4 +1,4 @@
-package com.example.toncontest.ui.theme.components.main
+package com.example.toncontest.ui.theme.components.main.transaction
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

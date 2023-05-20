@@ -13,14 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.toncontest.data.main.returnRandomCards
-import com.example.toncontest.ui.theme.components.main.TransactionColumnCard
+import com.example.toncontest.data.main.TransactionClass
 import com.example.toncontest.ui.theme.robotoFamily
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TransactionColumn(returnId: (result: Int?) -> Unit) {
-    val grouped = returnRandomCards()
+fun TransactionColumn(returnId: (result: String?) -> Unit, cards: MutableList<TransactionClass>) {
+    val grouped = cards.groupBy { it.date }
     LazyColumn(
         modifier = Modifier
             .padding(top = 20.dp, start = 12.dp, end = 12.dp)
@@ -45,7 +44,7 @@ fun TransactionColumn(returnId: (result: Int?) -> Unit) {
                     isIncome = card.isIncome,
                     time = card.time,
                     address = card.address,
-                    fee = card.fee.toBigDecimal().toPlainString(),
+                    fee = card.fee.toPlainString(),
                     message = card.message,
                     onClick = {
                         returnId(card.id)

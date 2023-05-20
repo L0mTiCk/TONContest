@@ -29,6 +29,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.data.main.cardList
@@ -47,15 +48,15 @@ import com.example.toncontest.ui.theme.robotoFamily
 
 
 @Composable
-fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
-    val transaction = cardList[transactionId]
+fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: String, navController: NavController) {
+    val transaction = cardList.first { it.id == transactionId }
     val amountColor = if (transaction.isIncome) TonGreen else TonRed
     val amountString = transaction.amount.toString().split('.')
     val addressType =
         if (transaction.isIncome) MainStrings.transactionCardSenderTitle else MainStrings.transactionCardRecipientTitle
     val address = transaction.address
     val dns = transaction.dns
-    var status by remember { mutableStateOf(0) }
+    var status by remember { mutableStateOf(if (transaction.actionSucceed) 1 else -1) }
 
     Column(
         modifier = Modifier
@@ -123,7 +124,7 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
                 )
             }
             Text(
-                text = "${transaction.fee.toBigDecimal().toPlainString()} transaction fee",
+                text = "${transaction.fee} transaction fee",
                 color = TonGray,
                 fontSize = 15.sp,
                 fontFamily = robotoFamily,
@@ -163,7 +164,7 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
 
                 1 -> {
                     Text(
-                        text = "(TODO: date) at ${transaction.time}",
+                        text = "${transaction.date}, ${transaction.year} at ${transaction.time}",
                         color = TonGray,
                         fontSize = 15.sp,
                         fontFamily = robotoFamily,
@@ -211,11 +212,10 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: Int) {
                     DnsField(dns = dns)
                 }
                 DetailsAddressField(addressType = addressType, address = address)
-                //TODO: change to real transaction id!!
-                TransactionIdField(id = "7HxFi5…JpHcU=")
+                TransactionIdField(id = transaction.id)
                 ViewInExplorerField()
             }
-            SendToAddressButton(address = address)
+            SendToAddressButton(address = address, navController = navController)
         }
     }
 }

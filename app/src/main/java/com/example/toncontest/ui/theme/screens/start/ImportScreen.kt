@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.start
 
+import android.content.Context
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -29,10 +30,15 @@ import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.DefaultText
 import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.ui.theme.screens.NavBack
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun ImportScreen(navController: NavController) {
+fun ImportScreen(navController: NavController, context: Context) {
     var showDialog by remember { mutableStateOf(false) }
+    var isChecking by remember { mutableStateOf(false) }
+    var isValid by remember { mutableStateOf(false) }
     var scrollState = rememberScrollState()
 
     val alpha: Float by animateFloatAsState(
@@ -42,6 +48,28 @@ fun ImportScreen(navController: NavController) {
             easing = LinearEasing
         )
     )
+
+    LaunchedEffect(key1 = isChecking) {
+        if (isChecking) {
+            CoroutineScope(Dispatchers.IO).launch {
+                if (importCheck()) {
+                    isValid = true
+                } else {
+                    showDialog = true
+                }
+                isChecking = false
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = isValid) {
+        if (isValid) {
+            navController.navigate("success")
+            val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+            sharedPref.edit().putString("MNEMONIC", Data.importMnemonic.joinToString("|")).apply()
+            isValid = false
+        }
+    }
 
     @Composable
     fun ImportAlert(show: Boolean) {
@@ -81,16 +109,15 @@ fun ImportScreen(navController: NavController) {
     ) {
         Button(
             onClick = {
-                if (importCheck())
-                    navController.navigate(route)
-                else {
-                    showDialog = true
-                }
+                isChecking = true
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = backColor),
             shape = RoundedCornerShape(10.dp),
-            elevation = ButtonDefaults.elevation(0.dp, 0.dp)
+            elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+            modifier = Modifier
+                .width(200.dp)
         ) {
+            Spacer(modifier = Modifier.size(24.dp))
             Text(
                 text = text,
                 color = textColor,
@@ -99,8 +126,15 @@ fun ImportScreen(navController: NavController) {
                 fontWeight = FontWeight.Medium,
                 fontSize = 15.sp,
                 modifier = Modifier
-                    .width(200.dp)
                     .padding(top = 14.dp, bottom = 14.dp)
+                    .weight(1f)
+            )
+            CircularProgressIndicator(
+                color = Color.White,
+                strokeWidth = 2.dp,
+                modifier = Modifier
+                    .size(24.dp)
+                    .alpha(animateFloatAsState(targetValue = if (isChecking) 1f else 0f).value)
             )
         }
         if (showDialog) {
@@ -112,7 +146,9 @@ fun ImportScreen(navController: NavController) {
             NavBack(
                 navController = navController
             )
-            Row(modifier = Modifier.fillMaxWidth().height(56.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
                 Text(text = Data.importHeaderText,
                     fontFamily = robotoFamily,
                     textAlign = TextAlign.Center,
@@ -130,7 +166,7 @@ fun ImportScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(it)
-                .verticalScroll(scrollState,true)
+                .verticalScroll(scrollState, true)
         ) {
             Spacer(modifier = Modifier.height(50.dp))
             Loader(res = R.raw.recoveryphrase)

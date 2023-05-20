@@ -1,12 +1,14 @@
 package com.example.toncontest.ui.theme.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -114,9 +117,10 @@ fun ButtonWithAlertDialog(textColor: Color = Color.White, backColor: Color = Lig
 }
 
 @Composable
-fun NavBack(navController: NavController){
+fun NavBack(navController: NavController, tint: Color = Color.Black){
     Column(modifier = Modifier
         .fillMaxWidth()
+        .background(Color.Transparent)
     ){
         Box(contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -124,22 +128,27 @@ fun NavBack(navController: NavController){
                 .height(48.dp)
                 .padding(4.dp)
         ) {
-            Image(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "BackArrow",
-                modifier = Modifier
-                    .width(24.dp)
-                    .height(24.dp)
-                    .padding(top = 6.dp)
-                    .clickable { navController.popBackStack()},
-            )
+            IconButton(onClick = { navController.popBackStack() }) {
+                Image(
+                    imageVector = Icons.Default.ArrowBack,
+                    colorFilter = ColorFilter.tint(tint),
+                    contentDescription = "BackArrow",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                        .padding(top = 6.dp),
+
+                )
+            }
         }
     }
 
 }
 
 @Composable
-fun Loader(res: Int, modifier: Modifier = Modifier.width(100.dp).height(100.dp)) {
+fun Loader(res: Int, modifier: Modifier = Modifier
+    .width(100.dp)
+    .height(100.dp)) {
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {

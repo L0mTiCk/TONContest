@@ -1,7 +1,6 @@
 package com.example.toncontest.data
 
 import com.example.toncontest.data.testing.mnemonicRandom
-import com.example.toncontest.data.ton.mnemonic.genMnemonic
 
 object Data {
     var isFirstLaunch = true
@@ -85,4 +84,10 @@ object Data {
             "only you control — directly, without\n" +
             "middlemen or bankers. "
     val doneButtonText = "View my wallet"
+
+    //no camera permission screen
+    val noCameraHeaderText = "No Camera Access"
+    val noCameraMainText = "TON Wallet doesn’t have access to the camera. Please enable camera access to scan QR codes."
+    val noCameraButtonText = "Open Settings"
+
 }

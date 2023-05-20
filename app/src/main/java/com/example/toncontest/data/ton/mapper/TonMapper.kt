@@ -1,9 +1,9 @@
 package com.example.toncontest.data.ton.mapper
 
+import com.example.toncontest.data.ton.constants.OpCodes
 import com.example.toncontest.data.ton.dto.AccountResponseDTO
 import com.example.toncontest.data.ton.dto.TonMsgAction
 import com.example.toncontest.data.ton.dto.TonMsgType
-import com.example.toncontest.data.ton.dto.TonTxDTO
 import com.example.toncontest.data.ton.dto.TonTxMsg
 import com.example.toncontest.data.ton.extension.getState
 import com.example.toncontest.data.ton.extension.loadRemainingBits
@@ -13,7 +13,7 @@ import org.ton.cell.Cell
 import org.ton.crypto.hex
 import org.ton.tlb.CellRef
 import org.ton.tlb.loadTlb
-import com.example.toncontest.data.ton.constants.OpCodes
+import com.example.toncontest.data.ton.dto.TonTxDTO
 
 
 class TonMapper {
@@ -146,7 +146,8 @@ class TonMapper {
             computeSucceed = computePh?.success,
             computeExitCode = computePh?.r1?.value?.exitCode,
             actionSucceed = descr?.action?.value?.value?.success,
-            actionExitCode = descr?.action?.value?.value?.resultCode
+            actionExitCode = descr?.action?.value?.value?.resultCode,
+            created = tx.now.toLong()
         )
     }
 

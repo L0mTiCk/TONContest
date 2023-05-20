@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.toncontest.R
 import com.example.toncontest.data.main.MainStrings
+import com.example.toncontest.data.ton.account.account
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
@@ -37,7 +38,7 @@ fun CreatedWallet(){
             fontSize = 15.sp,
             modifier = Modifier.padding(top = 20.dp)
         )
-        val address = "UQBFz01R2CU7YA8pevUaNIYEzi1mRo4cX-r3W2Dwx-WEAoKP"
+        val address = account.address
         Text(
             text = address,
             fontFamily = robotoFamily,

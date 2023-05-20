@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.main.receive
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -20,15 +21,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.toncontest.data.main.MainStrings
+import com.example.toncontest.data.ton.account.account
 import com.example.toncontest.ui.theme.TonGray
 import com.example.toncontest.ui.theme.components.main.CardTitle
 import com.example.toncontest.ui.theme.components.main.ShareButton
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
-fun ReceiveCard(onDrag: (Boolean) -> Unit) {
-    val address = "lhGE49PbJckcU1y70jEQwf\n" +
-            "6InI414L1PLMIs3rrFx50F"
+fun ReceiveCard(onDrag: (Boolean) -> Unit, context: Context) {
+    val accAddress = account.address
+    val address = accAddress.substring(0, accAddress.length / 2) + "\n" + accAddress.substring(accAddress.length / 2)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,7 +73,7 @@ fun ReceiveCard(onDrag: (Boolean) -> Unit) {
                         .width(275.dp)
                 )
             }
-            ShareQR()
+            ShareQR(context = context)
             Text(
                 text = address,
                 minLines = 2,
@@ -83,7 +85,7 @@ fun ReceiveCard(onDrag: (Boolean) -> Unit) {
                     .padding(top = 28.dp)
                     .fillMaxWidth()
             )
-            ShareButton(address = address)
+            ShareButton(address = accAddress)
         }
     }
 }

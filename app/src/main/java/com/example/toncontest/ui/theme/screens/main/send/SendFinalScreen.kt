@@ -16,15 +16,23 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.toncontest.data.ton.transactions.sendTransaction
 import com.example.toncontest.ui.theme.components.main.transaction.send.ContinueButton
 import com.example.toncontest.ui.theme.components.main.transaction.send.done.SendingDoneScreen
 import com.example.toncontest.ui.theme.components.main.transaction.send.done.SendingScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 
 @Composable
@@ -33,7 +41,9 @@ fun SendFinalScreen(navController: NavController) {
     var isDone by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = Unit) {
-        delay(3500)
+        CoroutineScope(Dispatchers.IO).async {
+            sendTransaction()
+        }.await()
         isSent = false
         delay(300)
         isDone = true
@@ -81,7 +91,7 @@ fun SendFinalScreen(navController: NavController) {
                 modifier = Modifier,
                 verticalArrangement = Arrangement.Bottom
             ) {
-                ContinueButton(navController = navController, error = {}, route = "main", mode = 2)
+                ContinueButton(navController = navController, error = {}, route = "main", mode = 4)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
