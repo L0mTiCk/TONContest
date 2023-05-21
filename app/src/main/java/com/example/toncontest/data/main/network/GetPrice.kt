@@ -10,8 +10,13 @@ class Values(
     var rub: Double,
     var eur: Double
 ) {
-    fun getValue(balance: Double): Double {
-        return usd * balance
+    fun getValue(balance: Double, currency: String): Double {
+        when (currency) {
+            "usd" -> return usd * balance
+            "rub" -> return rub * balance
+            "eur" -> return eur * balance
+            else -> return usd * balance
+        }
     }
 }
 

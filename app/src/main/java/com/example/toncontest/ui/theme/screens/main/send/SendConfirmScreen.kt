@@ -5,6 +5,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -96,7 +99,7 @@ fun SendConfirmScreen(navController: NavController, isBlocked: Boolean = false) 
         isOverflowed = comment.length > Variables.sendConfirmInputLen
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
@@ -189,9 +192,15 @@ fun SendConfirmScreen(navController: NavController, isBlocked: Boolean = false) 
                 SendDetailsAmount()
                 SendDetailsFee()
                 Spacer(modifier = Modifier.weight(1f))
-                ContinueButton(navController = navController, error = {}, route = "sendFinal", mode = 3)
-                Spacer(modifier = Modifier.height(16.dp))
             }
+        }
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ContinueButton(navController = navController, error = {}, route = "sendFinal", mode = 3)
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

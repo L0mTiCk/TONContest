@@ -88,8 +88,8 @@ fun ContinueButton(navController: NavController, error: (Boolean) -> Unit, route
                 }
 
                 2 -> {
-                    if (sendInfo.amount <= account.balance.toString()
-                            .toDouble() && sendInfo.amount > 0.0
+                    if (sendInfo.amount <= (account.balance.toString()
+                            .toDouble() - 0.01) && sendInfo.amount > 0.0
                     )
                         navController.navigate(route)
                 }

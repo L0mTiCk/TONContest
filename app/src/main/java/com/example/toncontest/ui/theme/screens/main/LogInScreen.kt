@@ -184,7 +184,7 @@ fun LogInScreen(navController: NavController, context: Context) {
         }
     }
 
-    val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+    val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
     val confirmPassword = sharedPref.getString("PASSWORD", "")
 
     if (currentIndex == numOfDigits) {

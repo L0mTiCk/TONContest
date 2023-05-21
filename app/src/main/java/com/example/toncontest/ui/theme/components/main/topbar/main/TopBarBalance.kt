@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.components.main.topbar.main
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -29,7 +30,18 @@ import com.example.toncontest.ui.theme.screens.Loader
 import kotlinx.coroutines.delay
 
 @Composable
-fun TopBarBalance(balance: Double, alpha: Float) {
+fun TopBarBalance(balance: Double, alpha: Float, context: Context) {
+
+    val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
+    var currencyName = sharedPref.getString("CURRENCY", "rub")?.lowercase()
+
+    var symbol: String
+    when (currencyName) {
+        "usd" -> symbol = "$"
+        "rub" -> symbol = "₽"
+        "eur" -> symbol = "€"
+        else -> symbol = ""
+    }
 
     var isVisible by remember { mutableStateOf(false) }
 
@@ -67,7 +79,7 @@ fun TopBarBalance(balance: Double, alpha: Float) {
                 }
                 //TODO: implement different values
                 Text(
-                    text = "≈ \$${"%.${2}f".format(values.getValue(balance))}",
+                    text = "≈ ${symbol}${"%.${2}f".format(values.getValue(balance, currencyName!!))}",
                     fontFamily = robotoFamily,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,

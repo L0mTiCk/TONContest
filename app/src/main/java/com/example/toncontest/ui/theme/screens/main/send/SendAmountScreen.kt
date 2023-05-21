@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -126,7 +127,7 @@ fun SendAmountScreen(navController: NavController) {
         return builder.toAnnotatedString()
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
@@ -199,7 +200,7 @@ fun SendAmountScreen(navController: NavController) {
                     )
                 }
                 Column(
-                    modifier = Modifier.fillMaxSize().weight(2f),
+                    modifier = Modifier.fillMaxSize().padding(bottom = 170.dp),
                     verticalArrangement = Arrangement.Center
                 ) {
                     Row(
@@ -272,56 +273,56 @@ fun SendAmountScreen(navController: NavController) {
                     )
                 }
             }
-            Column(
-                verticalArrangement = Arrangement.Bottom,
+        }
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier
+                .padding(top = 30.dp, start = 20.dp, bottom = 16.dp, end = 20.dp)
+                .fillMaxWidth()
+                .fillMaxSize()
+        ) {
+            Row(
                 modifier = Modifier
-                    .padding(top = 30.dp, start = 20.dp, bottom = 16.dp, end = 20.dp)
-                    .fillMaxWidth()
-                    .weight(1.3f)
+                    .padding(top = 53.dp)
+                    .height(48.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
+                Text(
+                    text = MainStrings.sendAllText,
+                    color = Color.Black
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.diamond),
+                    contentDescription = "Diamond",
                     modifier = Modifier
-                        .padding(top = 53.dp)
-                        .height(48.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = MainStrings.sendAllText,
-                        color = Color.Black
+                        .size(18.dp)
+                )
+                Text(
+                    text = balance.toString(),
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Switch(
+                    checked = checked,
+                    onCheckedChange = {
+                        checked = it
+                        if (checked) {
+                            amount = balance.toString()
+                        } else {
+                            amount = 0.0.toString()
+                        }
+                    },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Light_Blue,
+                        checkedTrackColor = Light_Blue,
+                        checkedTrackAlpha = 0.8f,
+                        uncheckedThumbColor = Color.LightGray,
+                        uncheckedTrackColor = Color.LightGray
                     )
-                    Image(
-                        painter = painterResource(id = R.drawable.diamond),
-                        contentDescription = "Diamond",
-                        modifier = Modifier
-                            .size(18.dp)
-                    )
-                    Text(
-                        text = balance.toString(),
-                        color = Color.Black
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Switch(
-                        checked = checked,
-                        onCheckedChange = {
-                            checked = it
-                            if (checked) {
-                                amount = balance.toString()
-                            } else {
-                                amount = 0.0.toString()
-                            }
-                        },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Light_Blue,
-                            checkedTrackColor = Light_Blue,
-                            checkedTrackAlpha = 0.8f,
-                            uncheckedThumbColor = Color.LightGray,
-                            uncheckedTrackColor = Color.LightGray
-                        )
-                    )
-                }
-                ContinueButton(navController = navController, error = {}, route = "sendConfirm", 2)
-                Spacer(modifier = Modifier.height(16.dp))
+                )
             }
+            ContinueButton(navController = navController, error = {}, route = "sendConfirm", 2)
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

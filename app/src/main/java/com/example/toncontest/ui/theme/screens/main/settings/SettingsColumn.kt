@@ -47,7 +47,7 @@ fun SettingsColumn(navController: NavController, context: Context) {
             AddressSetting()
         }
         item {
-            CurrencySetting()
+            CurrencySetting(context = context)
         }
         item {
             ListOfTokens()

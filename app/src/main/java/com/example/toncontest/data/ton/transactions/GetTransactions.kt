@@ -90,7 +90,7 @@ suspend fun getTransactions(account: Account) {
                                 message = "",
                                 time = "${dateTime.hour}:${minutes}",
                                 date = "${
-                                    dateTime.dayOfWeek.name.lowercase()
+                                    dateTime.month.name.lowercase()
                                         .replaceFirstChar { it.uppercaseChar() }
                                 } ${dateTime.dayOfMonth}",
                                 year = "${dateTime.year}",

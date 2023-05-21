@@ -47,8 +47,7 @@ class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPref = this.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
-        sharedPref.edit().clear().apply()
+        val sharedPref = this.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
         val isWalletCreated = sharedPref.getBoolean("CREATED", false)
         val startDestination = if (isWalletCreated) "main" else "main"
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
@@ -175,7 +174,7 @@ class MainActivity : FragmentActivity() {
 
     override fun onResume() {
         super.onResume()
-        val sharedPref = this.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+        val sharedPref = this.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
         val isCreated = sharedPref.getBoolean("CREATED", false)
         navigateFunction?.invoke(isCreated)

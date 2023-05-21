@@ -172,7 +172,7 @@ fun PasscodeScreen(navController: NavController, context: Context) {
         if (password == confirmPassword) {
             Log.d("confirm", "navigate")
             navController.navigate("done")
-            val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
             editor.putString("PASSWORD", password.toString())
             editor.putBoolean("CREATED", true)

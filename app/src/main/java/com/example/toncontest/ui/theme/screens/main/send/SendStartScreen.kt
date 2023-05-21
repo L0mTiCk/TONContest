@@ -155,20 +155,20 @@ fun SendStartScreen(navController: NavController ,address: String = "", id: Int 
                     })
                 }
             }
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                ContinueButton(
-                    navController = navController,
-                    { error -> isError = error },
-                    "sendAmount",
-                    1
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+        }
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            ContinueButton(
+                navController = navController,
+                { error -> isError = error },
+                "sendAmount",
+                1
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
         Column(
             modifier = Modifier.fillMaxSize(),

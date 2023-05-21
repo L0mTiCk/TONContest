@@ -65,7 +65,7 @@ fun ImportScreen(navController: NavController, context: Context) {
     LaunchedEffect(key1 = isValid) {
         if (isValid) {
             navController.navigate("success")
-            val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+            val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
             sharedPref.edit().putString("MNEMONIC", Data.importMnemonic.joinToString("|")).apply()
             isValid = false
         }

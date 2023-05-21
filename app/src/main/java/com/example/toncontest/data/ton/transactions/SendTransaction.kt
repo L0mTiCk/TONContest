@@ -10,17 +10,17 @@ import org.ton.cell.buildCell
 import org.ton.contract.wallet.WalletTransfer
 
 suspend fun sendTransaction() {
-        walletV4R2.transfer(
-            WalletTransfer {
-                destination = AddrStd(sendInfo.recipient)
-                coins = Coins.ofNano(sendInfo.amount.toNano())
-                bounceable = true
-                body = buildCell {
-                    storeUInt(0, 32)
-                    storeBytes(sendInfo.comment.toByteArray())
-                }
-                stateInit = null
-                sendMode = SendMode.PAY_GAS_SEPARATELY
+    walletV4R2.transfer(
+        WalletTransfer {
+            destination = AddrStd(sendInfo.recipient)
+            coins = Coins.ofNano(sendInfo.amount.toNano())
+            bounceable = true
+            body = buildCell {
+                storeUInt(0, 32)
+                storeBytes(sendInfo.comment.toByteArray())
             }
-        )
+            stateInit = null
+            sendMode = SendMode.PAY_GAS_SEPARATELY
+        }
+    )   
 }

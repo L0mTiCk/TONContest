@@ -27,7 +27,7 @@ import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
 fun BiometricSetting(context: Context) {
-    val sharedPref = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+    val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
     val editor = sharedPref.edit()
 
     var checked by remember { mutableStateOf(sharedPref.getBoolean("BIOMETRIC", false)) }

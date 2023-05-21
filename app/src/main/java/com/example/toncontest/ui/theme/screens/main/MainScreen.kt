@@ -167,7 +167,7 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
 
             topBar = {
                 if (hasConnection) {
-                    TopBarBalance(balance = balance, alpha = alpha)
+                    TopBarBalance(balance = balance, alpha = alpha, context = context)
                 } else {
                     TopBarConnection(alpha = connectionAlpha, context, updated = { refreshing = it })
                 }

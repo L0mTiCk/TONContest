@@ -34,7 +34,7 @@ suspend fun getAccInfo(tonClient: TonClient, address: String): Coins {
 lateinit var walletV4R2: WalletV4R2
 
 suspend fun getAccount(context: Context): Account {
-    //val sharedPreferences = context.getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE)
+    //val sharedPreferences = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
 
     val m = listOf(
         "wise",

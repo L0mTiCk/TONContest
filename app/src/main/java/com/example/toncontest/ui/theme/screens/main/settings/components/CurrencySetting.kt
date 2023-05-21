@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.main.settings.components
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,11 +31,14 @@ import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 
 @Composable
-fun CurrencySetting() {
+fun CurrencySetting(context: Context) {
     var expanded by remember { mutableStateOf(false) }
     var xPosition by remember { mutableStateOf(0.dp) }
     var yPosition by remember { mutableStateOf(0.dp) }
     var value by remember { mutableStateOf("USD") }
+
+    val sharedPreferences = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
+    value = sharedPreferences.getString("CURRENCY", "USD")!!
 
     Column(
         modifier = Modifier
@@ -69,16 +73,18 @@ fun CurrencySetting() {
                 ) {
                     DropdownMenuItem(onClick = {
                         expanded = false
-                        value = "BYN"
+                        sharedPreferences.edit().putString("CURRENCY", "EUR").apply()
+                        value = "EUR"
                     }) {
                         Text(
-                            text = "BYN",
+                            text = "EUR",
                             fontSize = 15.sp,
                             color = Light_Blue
                         )
                     }
                     DropdownMenuItem(onClick = {
                         expanded = false
+                        sharedPreferences.edit().putString("CURRENCY", "USD").apply()
                         value = "USD"
                     }) {
                         Text(
@@ -89,6 +95,7 @@ fun CurrencySetting() {
                     }
                     DropdownMenuItem(onClick = {
                         expanded = false
+                        sharedPreferences.edit().putString("CURRENCY", "RUB").apply()
                         value = "RUB"
                     }) {
                         Text(
