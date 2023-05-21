@@ -7,6 +7,7 @@ import com.example.toncontest.data.ton.account.Account
 import com.example.toncontest.data.ton.client.liteClient
 import com.example.toncontest.data.ton.client.tonMapper
 import com.example.toncontest.data.ton.extension.fromNano
+import org.ton.bitstring.BitString
 import org.ton.block.AddrStd
 import org.ton.lite.client.internal.FullAccountState
 import org.ton.lite.client.internal.TransactionId
@@ -19,16 +20,7 @@ suspend fun getTransactions(account: Account) {
         Log.d("transactions", "get transaction call")
         cardList.clear()
         accountState = liteClient.getAccountState(accountAddress = AddrStd(account.address))
-//        val txs = (accountState.lastTransactionId?.let {
-////            //TODO: change for user wallet
-////            liteClient.getTransactions(
-////                accountAddress = AddrStd("EQAi9rzZB9jxRCx8YnmkegMplY_wfg0AJmCnm8iIWwM23hO8"),
-////                fromTransactionId = accountState.lastTransactionId!!,
-////                count = 20
-////            )
-////        } ?: listOf()).map {
-////            tonMapper.mapTx(it.transaction.value, it.blockId.seqno, it.blockId.workchain)
-////        }
+
         var size = 0
         var lastTransactionId = accountState.lastTransactionId!!
         do {
@@ -42,7 +34,11 @@ suspend fun getTransactions(account: Account) {
             size = txs.size
             Log.d("transactions", "Num of transactions = ${txs.size}")
             Log.d("transactions", txs[1].toString())
-            for (dto in txs) {
+            for (i in 0..txs.size - 1) {
+                val dto = txs[i]
+                if (dto.lt == lastTransactionId.lt && cardList.size > 0) {
+                    continue
+                }
                 Log.d("transactions", dto.hash)
                 val instant = Instant.ofEpochSecond(dto.created)
                 val dateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime()
@@ -106,11 +102,13 @@ suspend fun getTransactions(account: Account) {
                 }
             }
             //TODO: hash size is 1=216, but this is 512
-                lastTransactionId = TransactionId(txs.first().hash.toByteArray(), txs.last().lt)
+                //lastTransactionId = TransactionId(txs.first().hash.toByteArray(), txs.last().lt)
+                lastTransactionId = TransactionId(BitString(txs.last().hash), txs.last().lt)
                 Log.d("transactions", "Generated id = ${lastTransactionId.toString()}, last id = ${accountState.lastTransactionId}")
-        } while (size < 1)
+        } while (size == 16)
     } catch (e: Exception) {
         Log.d("ton", "No transactions")
         Log.d("transactions", e.message.toString())
     }
+    Log.d("transactions", "Total transactions num = ${cardList.size}")
 }

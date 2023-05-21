@@ -1,3 +1,4 @@
+import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -17,12 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.toncontest.data.main.MainStrings
+import com.example.toncontest.data.main.network.checkConnection
 import com.example.toncontest.ui.theme.robotoFamily
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TopBarConnection(alpha: Float, updated: (Boolean) -> Unit) {
+fun TopBarConnection(alpha: Float, context: Context, updated: (Boolean) -> Unit) {
 
     var connecting by remember { mutableStateOf(false) }
     var updating by remember { mutableStateOf(false) }
@@ -37,13 +39,15 @@ fun TopBarConnection(alpha: Float, updated: (Boolean) -> Unit) {
     LaunchedEffect(key1 = Unit) {
         delay(300)
         isVisible = true
-        delay(3000)
-        connecting = true
-        delay(4000)
-        updating = true
-        delay(3000)
-        updated(true)
     }
+    checkConnection(context = context, connected = {it -> updating = it})
+    LaunchedEffect(key1 = updating) {
+        if (updating) {
+            delay(1000)
+            updated(true)
+        }
+    }
+
     AnimatedVisibility(
         visible = isVisible,
         enter = fadeIn(),

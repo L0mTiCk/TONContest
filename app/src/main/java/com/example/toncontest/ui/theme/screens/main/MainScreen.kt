@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.main.cardList
+import com.example.toncontest.data.main.network.checkConnection
 import com.example.toncontest.data.ton.account.Account
 import com.example.toncontest.data.ton.account.getAccount
 import com.example.toncontest.ui.theme.components.main.CreatedWallet
@@ -120,6 +121,9 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
         }
     }
 
+    LaunchedEffect(key1 = true) {
+        checkConnection(context, connection = { it -> hasConnection = it })
+    }
     var account by remember {
         mutableStateOf(
             Account(
@@ -127,12 +131,6 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                 Coins(VarUInteger(0))
             )
         )
-    }
-
-    //test
-    LaunchedEffect(key1 = Unit) {
-        delay(10000)
-        hasConnection = false
     }
 
     LaunchedEffect(key1 = isRefresh, key2 = refreshing) {
@@ -156,6 +154,7 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                 isAppeared = true
                 isRefresh = false
                 refreshing = false
+                hasConnection = true
             }
         }
     }
@@ -168,7 +167,7 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                 if (hasConnection) {
                     TopBarBalance(balance = balance, alpha = alpha)
                 } else {
-                    TopBarConnection(alpha = connectionAlpha, updated = { hasConnection = it })
+                    TopBarConnection(alpha = connectionAlpha, context, updated = { refreshing = it })
                 }
                 Row(
                     modifier = Modifier
