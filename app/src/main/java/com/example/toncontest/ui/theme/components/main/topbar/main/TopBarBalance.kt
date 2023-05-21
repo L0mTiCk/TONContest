@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -20,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.toncontest.R
+import com.example.toncontest.data.main.network.values
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.Loader
 import kotlinx.coroutines.delay
@@ -61,8 +65,9 @@ fun TopBarBalance(balance: Double, alpha: Float) {
                         modifier = Modifier.padding(start = 2.dp)
                     )
                 }
+                //TODO: implement different values
                 Text(
-                    text = "≈ \$89.6",
+                    text = "≈ \$${"%.${2}f".format(values.getValue(balance))}",
                     fontFamily = robotoFamily,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,

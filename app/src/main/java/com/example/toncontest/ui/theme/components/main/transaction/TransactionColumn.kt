@@ -2,7 +2,9 @@ package com.example.toncontest.ui.theme.components.main.transaction
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,7 +26,9 @@ fun TransactionColumn(returnId: (result: String?) -> Unit, cards: MutableList<Tr
         modifier = Modifier
             .padding(top = 20.dp, start = 12.dp, end = 12.dp)
             .fillMaxWidth()
-    ) {
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Top,
+        ) {
         grouped.forEach { (initial, cards) ->
 
             stickyHeader {

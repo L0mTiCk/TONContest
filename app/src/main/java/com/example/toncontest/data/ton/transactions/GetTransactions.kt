@@ -33,7 +33,6 @@ suspend fun getTransactions(account: Account) {
             }
             size = txs.size
             Log.d("transactions", "Num of transactions = ${txs.size}")
-            Log.d("transactions", txs[1].toString())
             for (i in 0..txs.size - 1) {
                 val dto = txs[i]
                 if (dto.lt == lastTransactionId.lt && cardList.size > 0) {
@@ -56,7 +55,7 @@ suspend fun getTransactions(account: Account) {
                             message = dto.inMsg.comment ?: "",
                             time = "${dateTime.hour}:${minutes}",
                             date = "${
-                                dateTime.dayOfWeek.name.lowercase()
+                                dateTime.month.name.lowercase()
                                     .replaceFirstChar { it.uppercaseChar() }
                             } ${dateTime.dayOfMonth}",
                             year = "${dateTime.year}",
@@ -75,7 +74,7 @@ suspend fun getTransactions(account: Account) {
                                 message = dto.outMsg[0].comment ?: "",
                                 time = "${dateTime.hour}:${minutes}",
                                 date = "${
-                                    dateTime.dayOfWeek.name.lowercase()
+                                    dateTime.month.name.lowercase()
                                         .replaceFirstChar { it.uppercaseChar() }
                                 } ${dateTime.dayOfMonth}",
                                 year = "${dateTime.year}",

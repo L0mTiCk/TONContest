@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.screens.main.send
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -8,9 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,16 +18,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,16 +37,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.R
-import com.example.toncontest.data.Data
 import com.example.toncontest.data.main.MainStrings
 import com.example.toncontest.data.main.send.sendInfo
 import com.example.toncontest.data.ton.account.account
@@ -67,106 +68,62 @@ fun SendAmountScreen(navController: NavController) {
     val dns = "andre.ton"
     val isDns = true
     val balance = account.balance.toString().toDouble()
-    var amount by remember { mutableStateOf(0.0) }
-    var amountStr by remember { mutableStateOf(mutableListOf("0", "0")) }
+    var amount by remember { mutableStateOf("-1") }
     var checked by remember { mutableStateOf(false) }
-    var numColor = animateColorAsState(targetValue = if (amount > balance) TonRed else Color.Black)
-    var overflowAlpha = animateFloatAsState(targetValue = if (amount > balance) 1f else 0f)
+    var numColor = animateColorAsState(targetValue = if ((amount.toDouble()) > balance) TonRed else Color.Black)
+    //var numColor = animateColorAsState(targetValue = Color.Black)
+    var overflowAlpha = animateFloatAsState(targetValue = if (amount.toDouble() > balance) 1f else 0f)
+    //var overflowAlpha = animateFloatAsState(targetValue = 1f)
+
 
     LaunchedEffect(key1 = amount) {
-        amountStr = amount.toString().split(".") as MutableList<String>
-        sendInfo.amount = amount
+        Log.d("amountSend", amount)
+        sendInfo.amount = amount.toDouble()
     }
 
-    @Composable
-    fun PasscodeKeyboard() {
+    fun buildAnnotatedStringWithNums(text: String): AnnotatedString {
+        val builder = AnnotatedString.Builder()
 
-        @Composable
-        fun NumButton(index: Int) {
-            var backColor = if (index != -2) Light_Gray else Color.Transparent
-            Button(
-                onClick = {
-                    checked = false
-                    amount -= amount % 1
-                    amount = amount * 10 + index
-                },
-                modifier = Modifier
-                    .width(109.dp)
-                    .height(47.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = backColor
-                ),
-                elevation = ButtonDefaults.elevation(0.dp, 0.dp)
-            ) {
-                Text(
-                    text = if (index != -1) index.toString() else "",
-                    fontFamily = robotoFamily,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.width(45.dp)
-                )
-                Text(
-                    text =
-                    if (index != -1 && index != 0)
-                        Data.lettersForButtons[index]
-                    else if (index != -1 && index == 0)
-                        Data.lettersForButtons[11]
-                    else "",
-                    fontFamily = robotoFamily,
-                    fontSize = 14.sp,
-                    color = Color.LightGray,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
-        }
 
-        @Composable
-        fun BackspaceButton() {
-            Button(
-                onClick = {
-                    amount = (amountStr[0].toInt().div(10)).toDouble()
-                    checked = false
-                },
-                modifier = Modifier
-                    .width(109.dp)
-                    .height(47.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Light_Gray
-                ),
-                elevation = ButtonDefaults.elevation(0.dp, 0.dp)
+        var splitStr = text.split(".")
+        Log.d("amountSend", "split str = " + splitStr.toString())
+        Log.d("amountSend",  "Temp str = " + text)
+        if (splitStr.size == 1) {
+            builder.withStyle(
+                SpanStyle(
+                    color = numColor.value,
+                    fontFamily = robotoFamily,
+                    fontSize = 44.sp
+                )
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.backspace),
-                        contentDescription = "Test"
-                    )
+                if (text == "-1") {
+                    append("")
+                } else {
+                    append(text)
                 }
             }
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(horizontal = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+        else if (splitStr.size > 1) {
+            builder.withStyle(
+                SpanStyle(
+                    color = numColor.value,
+                    fontSize = 44.sp,
+                    fontFamily = robotoFamily
+                )
             ) {
-                itemsIndexed(Data.numsForButtons) { index, item ->
-                    if (index != 9 && index != 11)
-                        NumButton(index = item)
-                    else if (index == 11)
-                        BackspaceButton()
-                }
+                append(splitStr[0])
+            }
+            builder.withStyle(
+                SpanStyle(
+                    color = numColor.value,
+                    fontSize = 32.sp,
+                    fontFamily = robotoFamily
+                )
+            ) {
+                append("." + splitStr[1])
             }
         }
+        return builder.toAnnotatedString()
     }
 
     Column(
@@ -242,7 +199,7 @@ fun SendAmountScreen(navController: NavController) {
                     )
                 }
                 Column(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().weight(2f),
                     verticalArrangement = Arrangement.Center
                 ) {
                     Row(
@@ -251,37 +208,58 @@ fun SendAmountScreen(navController: NavController) {
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.size(44.dp))
                         Image(
                             painter = painterResource(id = R.drawable.diamond),
                             contentDescription = "Diamond",
                             modifier = Modifier.size(44.dp)
                         )
-                            Text(
-                                text = buildAnnotatedString {
-                                    withStyle(
-                                        SpanStyle(
-                                            color = if (amountStr[0] == "0") Light_Gray else numColor.value,
-                                            fontSize = 44.sp,
-                                            fontFamily = robotoFamily,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    ) {
-                                        append(amountStr[0])
+                        TextField(
+                            value = if (amount == "-1") "" else amount,
+                            onValueChange = { it ->
+                                var temp = it.replace(',', '.')
+                                temp = temp.replace("..", ".")
+                                if (temp.count { it == '.' } <= 1) {
+                                    if (temp == ".")
+                                        temp = "0."
+                                    else if (it == "") {
+                                        temp = (-1).toString()
                                     }
-                                    if (amountStr[1] != "0") {
-                                        withStyle(
-                                            SpanStyle(
-                                                color = numColor.value,
-                                                fontSize = 32.sp,
-                                                fontFamily = robotoFamily,
-                                                fontWeight = FontWeight.Medium
-                                            )
-                                        ) {
-                                            append("." + amountStr[1])
-                                        }
-                                    }
+                                    amount = temp
                                 }
+                                Log.d("amountSend", "Str from field = $temp")
+                            },
+                            visualTransformation = {
+                                TransformedText(
+                                    buildAnnotatedStringWithNums(amount),
+                                    offsetMapping = OffsetMapping.Identity
+                                )
+                            },
+                            singleLine = true,
+                            placeholder = {
+                                Text(
+                                    text = "0",
+                                    color = Light_Gray,
+                                    fontFamily = robotoFamily,
+                                    fontSize = 44.sp
+                                )
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done
+                            ),
+                            modifier = Modifier
+                                .padding(top = 12.dp)
+                                .widthIn(1.dp, Dp.Infinity),
+                            colors = TextFieldDefaults.textFieldColors(
+                                focusedIndicatorColor = Color.Transparent,
+                                cursorColor = Light_Blue,
+                                backgroundColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
                             )
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                     Text(
                         text = MainStrings.sendBiggerAmount,
@@ -297,8 +275,8 @@ fun SendAmountScreen(navController: NavController) {
             Column(
                 verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 20.dp, bottom = 16.dp, end = 20.dp)
+                    .padding(top = 30.dp, start = 20.dp, bottom = 16.dp, end = 20.dp)
+                    .fillMaxWidth()
                     .weight(1.3f)
             ) {
                 Row(
@@ -327,9 +305,9 @@ fun SendAmountScreen(navController: NavController) {
                         onCheckedChange = {
                             checked = it
                             if (checked) {
-                                amount = balance
+                                amount = balance.toString()
                             } else {
-                                amount = 0.0
+                                amount = 0.0.toString()
                             }
                         },
                         colors = SwitchDefaults.colors(
@@ -343,7 +321,6 @@ fun SendAmountScreen(navController: NavController) {
                 }
                 ContinueButton(navController = navController, error = {}, route = "sendConfirm", 2)
                 Spacer(modifier = Modifier.height(16.dp))
-                PasscodeKeyboard()
             }
         }
     }

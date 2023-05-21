@@ -56,6 +56,7 @@ import androidx.navigation.NavController
 import com.example.toncontest.R
 import com.example.toncontest.data.main.cardList
 import com.example.toncontest.data.main.network.checkConnection
+import com.example.toncontest.data.main.network.getValues
 import com.example.toncontest.data.ton.account.Account
 import com.example.toncontest.data.ton.account.getAccount
 import com.example.toncontest.ui.theme.components.main.CreatedWallet
@@ -122,6 +123,7 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
     }
 
     LaunchedEffect(key1 = true) {
+        getValues()
         checkConnection(context, connection = { it -> hasConnection = it })
     }
     var account by remember {
