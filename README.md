@@ -7,7 +7,6 @@ This repository contains an Android application developed for the Ton Wallet Con
 - Wallet interface for TON blockchain.
 - Balance tracking and transaction history.
 - Sending and receiving TON tokens.
-- Security measures to protect wallet data.
 
 ## Limitations
 
