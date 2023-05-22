@@ -58,7 +58,9 @@ fun SuccessImportScreen(navController: NavController) {
                 text = "Proceed",
                 backColor = Light_Blue,
                 route = "main",
-                navController = navController
+                navController = navController,
+                isPopUp = true,
+                popUpRoute = "main"
             )
             Spacer(modifier = Modifier.height(117.dp))
         }

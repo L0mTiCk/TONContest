@@ -63,7 +63,9 @@ fun NoMnemonicScreen(navController: NavController){
                 text = Data.noMnemonicImportButtonText,
                 backColor = Light_Blue,
                 route = "import",
-                navController = navController
+                navController = navController,
+                isPopUp = true,
+                popUpRoute = "import"
             )
             Spacer(modifier = Modifier.height(8.dp))
             BackgroundButton(

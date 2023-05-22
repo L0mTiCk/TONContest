@@ -3,7 +3,6 @@ package com.example.toncontest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,8 +47,10 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPref = this.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
+        //TODO: remove this line
+        //sharedPref.edit().clear().apply()
         val isWalletCreated = sharedPref.getBoolean("CREATED", false)
-        val startDestination = if (isWalletCreated) "main" else "main"
+        val startDestination = if (isWalletCreated) "login" else "start"
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
         setContent {
             val navController = rememberNavController()
@@ -90,7 +91,6 @@ class MainActivity : FragmentActivity() {
                         navController.navigate("login")
                     }
                 }
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
@@ -108,17 +108,7 @@ class MainActivity : FragmentActivity() {
                             composable(route = "noMnemonic") { NoMnemonicScreen(navController = navController) }
                             composable(route = "done") { DoneScreen(navController = navController) }
 
-                            //TODO: redo to another activity launch
                             composable(route = "main") { MainScreen(navController = navController, context = this@MainActivity) }
-//                            composable(
-//                                route = "mainShare",
-//                                deepLinks = listOf(
-//                                    navDeepLink {
-//                                        uriPattern = "ton://share"
-//                                        action = Intent.ACTION_VIEW
-//                                    }
-//                                )
-//                            ) { MainScreen(navController = navController, context = this@MainActivity, isReceive = true) }
                             composable(route = "settings") { SettingsScreen(navController = navController, context = this@MainActivity) }
                             composable(route = "login") { LogInScreen( navController = navController, context = this@MainActivity) }
                             composable(route = "sendStart") { SendStartScreen(navController = navController) }
@@ -131,6 +121,24 @@ class MainActivity : FragmentActivity() {
                                 }
                             }
                             composable(route = "sendAmount") { SendAmountScreen(navController = navController) }
+                            composable(route = "sendConfirm") { SendConfirmScreen(navController = navController) }
+                            composable(route = "sendFinal") { SendFinalScreen(navController = navController) }
+                            composable(route = "noCamera") { NoCameraScreen(navController = navController, context = this@MainActivity) }
+                            //deeplinks
+
+                            //idk why, but if there are 2, even on ton://transfer/..... click share screen opens
+//                            composable(
+//                                route = "mainShare",
+//                                deepLinks = listOf(
+//                                    navDeepLink {
+//                                        uriPattern = "ton://share"
+//                                        action = Intent.ACTION_VIEW
+//                                    }
+//                                )
+//                            ) {
+//                                Log.d("transactions", "Deeplink main navigation")
+//                                MainScreen(navController = navController, context = this@MainActivity, isReceive = true)
+//                            }
                             composable(
                                 route = "sendConfirmDeepl",
                                 deepLinks = listOf(
@@ -154,17 +162,11 @@ class MainActivity : FragmentActivity() {
                                     }
                                 )
                             ) {backStackEntry ->
-                                //TODO: change send class
                                 sendInfo.recipient = (backStackEntry.arguments?.getString("wallet_address") ?: "" )
                                 sendInfo.amount = (backStackEntry.arguments?.getString("amount")?.toDouble() ?: 0.01 )
                                 sendInfo.comment = (backStackEntry.arguments?.getString("comment") ?: "" )
-                                Log.d("transactions", "Deeplink navigation")
                                 SendConfirmScreen(navController = navController, isBlocked = true)
                             }
-                            composable(route = "sendConfirm") { SendConfirmScreen(navController = navController) }
-                            composable(route = "sendFinal") { SendFinalScreen(navController = navController) }
-                            composable(route = "noCamera") { NoCameraScreen(navController = navController, context = this@MainActivity) }
-
                         }
                     }
                 }

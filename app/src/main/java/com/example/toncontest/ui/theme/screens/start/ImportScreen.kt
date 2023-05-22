@@ -33,6 +33,9 @@ import com.example.toncontest.ui.theme.screens.NavBack
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.ton.mnemonic.Mnemonic
+
+var isImport = false
 
 @Composable
 fun ImportScreen(navController: NavController, context: Context) {
@@ -65,6 +68,7 @@ fun ImportScreen(navController: NavController, context: Context) {
     LaunchedEffect(key1 = isValid) {
         if (isValid) {
             navController.navigate("success")
+            isImport = true
             val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
             sharedPref.edit().putString("MNEMONIC", Data.importMnemonic.joinToString("|")).apply()
             isValid = false
@@ -243,12 +247,14 @@ fun ImportScreen(navController: NavController, context: Context) {
 fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    isError = !text.isEmpty() && !Mnemonic.mnemonicWords().contains(text)
     TextField(
         value = text,
         singleLine = true,
         onValueChange = {
-            text = it
-            Data.importMnemonic[number - 1] = it
+            text = it.replace(" ", "")
+            Data.importMnemonic[number - 1] = it.replace(" ", "")
         },
         leadingIcon = {
             Text(
@@ -268,7 +274,8 @@ fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
             focusedIndicatorColor = Light_Blue,
             unfocusedIndicatorColor = Color.Gray,
             disabledIndicatorColor = Color.Gray
-        )
+        ),
+        isError = isError
     )
 }
 

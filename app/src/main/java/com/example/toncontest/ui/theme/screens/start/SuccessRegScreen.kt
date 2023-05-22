@@ -31,7 +31,6 @@ fun SuccessScreen(navController: NavController, context: Context) {
     var checked by remember { mutableStateOf(false) }
     val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
     val editor = sharedPref.edit()
-    //UI
     Scaffold(
         topBar = { NavBack(navController = navController) },
         backgroundColor = Color.White
@@ -72,15 +71,19 @@ fun SuccessScreen(navController: NavController, context: Context) {
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            var checkAlpha = if (Biometric.status(LocalContext.current)) 1f else 0f
+            val checkAlpha = if (Biometric.status(LocalContext.current)) 1f else 0f
             Row(modifier = Modifier.padding(bottom = 20.dp).alpha(checkAlpha)) {
                 Checkbox(
                     checked = checked,
-                    //TODO: make it work
                     onCheckedChange = { it ->
                         checked = it
-                        editor.putBoolean("BIOMETRIC", it)
-                        editor.apply()
+                        if (checked) {
+                            editor.putBoolean("BIOMETRIC", true)
+                            editor.apply()
+                        } else {
+                            editor.putBoolean("BIOMETRIC", false)
+                            editor.apply()
+                        }
                     },
                     modifier = Modifier
                         .width(18.dp)
@@ -103,7 +106,7 @@ fun SuccessScreen(navController: NavController, context: Context) {
                 text = Data.successButtonText,
                 backColor = Light_Blue,
                 route = "passcode",
-                navController = navController
+                navController = navController,
             )
             Spacer(modifier = Modifier.height(108.dp))
         }

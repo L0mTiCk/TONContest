@@ -166,12 +166,14 @@ fun PasscodeScreen(navController: NavController, context: Context) {
         password.clear()
         currentIndex = 0
         isConfirmation = true
-        Log.d("confirm", isConfirmation.toString())
     } else if (currentIndex == numOfDigits && isConfirmation) {
-        Log.d("confirm", "pass - ${password.toString()}, confPass - ${confirmPassword.toString()}")
         if (password == confirmPassword) {
             Log.d("confirm", "navigate")
-            navController.navigate("done")
+            if (isImport) {
+                navController.navigate("successImport")
+            } else {
+                navController.navigate("done")
+            }
             val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
             val editor = sharedPref.edit()
             editor.putString("PASSWORD", password.toString())

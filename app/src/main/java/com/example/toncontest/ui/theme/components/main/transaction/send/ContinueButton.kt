@@ -40,7 +40,6 @@ fun ContinueButton(navController: NavController, error: (Boolean) -> Unit, route
     var isChecking by remember { mutableStateOf(false) }
     var isValid by rememberSaveable { mutableStateOf(false) }
     var alpha by remember { mutableStateOf(0f) }
-    //todo: circular indicator
     val text = when (mode) {
         1 -> MainStrings.continueButtonText
         2 -> MainStrings.continueButtonText
@@ -89,7 +88,7 @@ fun ContinueButton(navController: NavController, error: (Boolean) -> Unit, route
 
                 2 -> {
                     if (sendInfo.amount <= (account.balance.toString()
-                            .toDouble() - 0.01) && sendInfo.amount > 0.0
+                            .toDouble()) && sendInfo.amount > 0.0
                     )
                         navController.navigate(route)
                 }

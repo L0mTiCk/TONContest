@@ -90,4 +90,9 @@ object Data {
     val noCameraMainText = "TON Wallet doesn’t have access to the camera. Please enable camera access to scan QR codes."
     val noCameraButtonText = "Open Settings"
 
+    //delete wallet
+    val deleteWalletAlertTitle = "Are you sure?"
+    val deleteWalletAlertText = "Are you sure you want to exit your wallet? This action cannot be undone, and all data and funds will be permanently lost. Please confirm your decision below.?"
+    val deleteWalletConfirmButton = "Exit Wallet"
+    val deleteWalletCancelButton = "Cancel"
 }

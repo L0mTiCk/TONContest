@@ -72,7 +72,7 @@ fun SettingsColumn(navController: NavController, context: Context) {
             BiometricSetting(context = context)
         }
         item {
-            DeleteSetting(navController = navController)
+            DeleteSetting(navController = navController, context = context)
         }
     }
 }

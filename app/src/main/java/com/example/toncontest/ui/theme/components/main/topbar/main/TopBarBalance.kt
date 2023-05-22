@@ -33,7 +33,7 @@ import kotlinx.coroutines.delay
 fun TopBarBalance(balance: Double, alpha: Float, context: Context) {
 
     val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
-    var currencyName = sharedPref.getString("CURRENCY", "rub")?.lowercase()
+    var currencyName = sharedPref.getString("CURRENCY", "usd")?.lowercase()
 
     var symbol: String
     when (currencyName) {
@@ -77,7 +77,6 @@ fun TopBarBalance(balance: Double, alpha: Float, context: Context) {
                         modifier = Modifier.padding(start = 2.dp)
                     )
                 }
-                //TODO: implement different values
                 Text(
                     text = "≈ ${symbol}${"%.${2}f".format(values.getValue(balance, currencyName!!))}",
                     fontFamily = robotoFamily,

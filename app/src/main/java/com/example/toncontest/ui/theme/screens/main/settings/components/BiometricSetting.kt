@@ -1,6 +1,7 @@
 package com.example.toncontest.ui.theme.screens.main.settings.components
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +31,9 @@ fun BiometricSetting(context: Context) {
     val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
     val editor = sharedPref.edit()
 
-    var checked by remember { mutableStateOf(sharedPref.getBoolean("BIOMETRIC", false)) }
+    var checked by remember { mutableStateOf(false) }
+    checked = sharedPref.getBoolean("BIOMETRIC", false)
+    Log.d("transactions", "Biometric - $checked")
     Column(
         modifier = Modifier
             .fillMaxWidth()

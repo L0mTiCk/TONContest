@@ -43,8 +43,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -99,6 +101,8 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
     var refreshing by remember { mutableStateOf(false) }
     val pullRefreshState =
         rememberPullRefreshState(refreshing = refreshing, onRefresh = { refreshing = true })
+
+    val clipboardManager = LocalClipboardManager.current
 
     var isReceive by remember { mutableStateOf(isReceive) }
     var transactionCardId by remember { mutableStateOf("") }
@@ -251,6 +255,9 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                                     .alpha(
                                         animateFloatAsState(targetValue = if (isAppeared) 1f else 0f).value
                                     )
+                                    .clickable {
+                                        clipboardManager.setText(annotatedString = AnnotatedString(account.address))
+                                    }
                             )
                             Row(
                                 modifier = Modifier.height(56.dp),

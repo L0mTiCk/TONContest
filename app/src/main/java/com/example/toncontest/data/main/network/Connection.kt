@@ -32,7 +32,8 @@ fun checkConnection(context: Context, connection: (Boolean) -> Unit = {}, connec
     connectivityManager.requestNetwork(networkRequest, networkCallback)
     val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     val isWifiConnected = networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
-    if (isWifiConnected) {
+    val isMobileConnected = networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true
+    if (isWifiConnected || isMobileConnected) {
         Log.d("transactions", "Wifi est")
         connection(true)
     } else {
