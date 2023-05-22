@@ -28,6 +28,7 @@ import com.example.toncontest.data.testing.textFieldsInput
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.*
+import org.ton.mnemonic.Mnemonic
 
 @Composable
 fun TestingScreen(navController: NavController) {
@@ -172,18 +173,28 @@ fun TestingScreen(navController: NavController) {
 }
 
 @Composable
-fun TestingTextInput(number: Int, modifier: Modifier = Modifier){
+fun TestingTextInput(number: Int, modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    isError = !text.isEmpty() && !Mnemonic.mnemonicWords().contains(text)
     Box(modifier = modifier) {
         TextField(
             value = text,
             singleLine = true,
             onValueChange = {
-                text = it
+                text = it.replace(" ", "")
                 textFieldsInput[mnemonicRandom.indexOf(number)] = it
-                            },
-            leadingIcon = { Text(text = "$number:", color = Color.Gray, fontSize = 15.sp, textAlign = TextAlign.End, modifier = Modifier.width(24.dp) )},
+            },
+            leadingIcon = {
+                Text(
+                    text = "$number:",
+                    color = Color.Gray,
+                    fontSize = 15.sp,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.width(24.dp)
+                )
+            },
             modifier = Modifier
                 .onFocusChanged { isFocused = it.isFocused }
                 .height(55.dp),
@@ -192,7 +203,8 @@ fun TestingTextInput(number: Int, modifier: Modifier = Modifier){
                 focusedIndicatorColor = Light_Blue,
                 unfocusedIndicatorColor = Color.Gray,
                 disabledIndicatorColor = Color.Gray
-            )
+            ),
+            isError = isError
         )
     }
 }

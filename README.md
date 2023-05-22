@@ -19,18 +19,19 @@ This repository contains an Android application developed for the Ton Wallet Con
 
 - **Deeplink functionality:** The Deeplink functionality in the application has certain limitations. It can either be used for sending funds or sharing the QR code, but not both simultaneously.
 
+- **Biometric settings:** Biometric checkbox before setting passcode is not working.
+
 ## Getting Started
 
 To get started with the Ton Wallet Contest Android application, follow these steps:
 
 1. Clone this repository to your local machine.
-2. Replace the `release.keystore` file with your own keystore file. The `release.keystore` file is located in the project's root directory. Ensure that you securely store your keystore file and do not share it publicly.
-3. Open the project in Android Studio.
-4. Build the application using Android Studio and run it on an Android device or emulator.
+2. Open the project in Android Studio.
+3. Build the application using Android Studio and run it on an Android device or emulator.
 
 ## Ready-made Build
 
-A ready-made build of the Ton Wallet Contest Android application can be found in the "builds" folder. If you do not wish to build the application manually, you can use the APK file provided in this folder.
+A ready-made build of the Ton Wallet Contest Android application can be found in the "apk" folder. If you do not wish to build the application manually, you can use the APK file provided in this folder.
 
 ## Contributing
 

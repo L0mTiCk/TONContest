@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.data.main.MainStrings
+import com.example.toncontest.data.start.Biometric
 import com.example.toncontest.ui.theme.Light_Blue
 import com.example.toncontest.ui.theme.screens.main.settings.components.AddressSetting
 import com.example.toncontest.ui.theme.screens.main.settings.components.BiometricSetting
@@ -68,8 +69,10 @@ fun SettingsColumn(navController: NavController, context: Context) {
         item {
             PasscodeSetting(navController = navController)
         }
-        item {
-            BiometricSetting(context = context)
+        if (Biometric.status(context)) {
+            item {
+                BiometricSetting(context = context)
+            }
         }
         item {
             DeleteSetting(navController = navController, context = context)
