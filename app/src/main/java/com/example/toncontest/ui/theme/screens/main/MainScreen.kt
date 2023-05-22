@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.toncontest.R
+import com.example.toncontest.data.Data
 import com.example.toncontest.data.main.cardList
 import com.example.toncontest.data.main.network.checkConnection
 import com.example.toncontest.data.main.network.getValues
@@ -84,7 +85,6 @@ import org.ton.block.VarUInteger
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(navController: NavController, context: Context, isReceive: Boolean = false) {
-    //Data.isFirstLaunch = false
     var isLoaded by remember { mutableStateOf(false) }
     var isAppeared by remember { mutableStateOf(false) }
     var isExpanded by remember { mutableStateOf(false) }
@@ -419,4 +419,7 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
         )
         PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
+
+    Data.isFirstLaunch = false
+
 }

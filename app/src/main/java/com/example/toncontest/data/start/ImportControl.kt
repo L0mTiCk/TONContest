@@ -11,7 +11,34 @@ import org.ton.api.pk.PrivateKeyEd25519
 import org.ton.mnemonic.Mnemonic
 
 suspend fun importCheck(): Boolean {
-    val mnemonic = Data.importMnemonic
+    //val mnemonic = Data.importMnemonic
+    var mnemonic = listOf(
+        "wise",
+        "asthma",
+        "goat",
+        "peasant",
+        "stove",
+        "harvest",
+        "fatal",
+        "swim",
+        "enemy",
+        "wrist",
+        "word",
+        "uniform",
+        "table",
+        "evidence",
+        "night",
+        "file",
+        "type",
+        "coach",
+        "equal",
+        "rocket",
+        "network",
+        "find",
+        "pluck",
+        "private"
+    )
+    Data.importMnemonic = mnemonic as MutableList<String>
     if (Mnemonic.isValid(mnemonic)) {
         val privateKey = PrivateKeyEd25519(Mnemonic.toSeed(mnemonic))
         val testWalletV4R2 = WalletV4R2(0, privateKey, liteClient)

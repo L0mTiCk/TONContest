@@ -1,6 +1,7 @@
 package com.example.toncontest.ui.theme.screens.start
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -31,6 +32,18 @@ fun SuccessScreen(navController: NavController, context: Context) {
     var checked by remember { mutableStateOf(false) }
     val sharedPref = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
     val editor = sharedPref.edit()
+
+    LaunchedEffect(key1 = checked) {
+        if (checked) {
+            editor.putBoolean("BIOMETRIC", true)
+            editor.apply()
+        } else {
+            editor.putBoolean("BIOMETRIC", false)
+            editor.apply()
+        }
+        Log.d("transactions", sharedPref.getBoolean("BIOMETRIC", false).toString())
+    }
+
     Scaffold(
         topBar = { NavBack(navController = navController) },
         backgroundColor = Color.White
@@ -72,18 +85,20 @@ fun SuccessScreen(navController: NavController, context: Context) {
                 .fillMaxHeight()
         ) {
             val checkAlpha = if (Biometric.status(LocalContext.current)) 1f else 0f
-            Row(modifier = Modifier.padding(bottom = 20.dp).alpha(checkAlpha)) {
+            Row(modifier = Modifier
+                .padding(bottom = 20.dp)
+                .alpha(checkAlpha)) {
                 Checkbox(
                     checked = checked,
                     onCheckedChange = { it ->
                         checked = it
-                        if (checked) {
-                            editor.putBoolean("BIOMETRIC", true)
-                            editor.apply()
-                        } else {
-                            editor.putBoolean("BIOMETRIC", false)
-                            editor.apply()
-                        }
+//                        if (checked) {
+//                            editor.putBoolean("BIOMETRIC", true)
+//                            editor.apply()
+//                        } else {
+//                            editor.putBoolean("BIOMETRIC", false)
+//                            editor.apply()
+//                        }
                     },
                     modifier = Modifier
                         .width(18.dp)
@@ -96,7 +111,9 @@ fun SuccessScreen(navController: NavController, context: Context) {
                 )
                 Text(
                     text = Data.checkBoxText,
-                    modifier = Modifier.padding(start = 12.dp).clickable { checked = !checked },
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .clickable { checked = !checked },
                     fontFamily = robotoFamily,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Normal
