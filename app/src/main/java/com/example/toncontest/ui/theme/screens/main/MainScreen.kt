@@ -165,7 +165,9 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
         }
     }
 
-    Box(Modifier.pullRefresh(pullRefreshState)) {
+    Box(
+        Modifier.pullRefresh(pullRefreshState)
+    ) {
         Scaffold(
             backgroundColor = Color.Black,
 
@@ -256,7 +258,11 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                                         animateFloatAsState(targetValue = if (isAppeared) 1f else 0f).value
                                     )
                                     .clickable {
-                                        clipboardManager.setText(annotatedString = AnnotatedString(account.address))
+                                        clipboardManager.setText(
+                                            annotatedString = AnnotatedString(
+                                                account.address
+                                            )
+                                        )
                                     }
                             )
                             Row(
@@ -412,7 +418,8 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                     TransactionCard(
                         onDrag = { newReceive -> showTransactionCard = newReceive },
                         transactionCardId,
-                        navController = navController
+                        navController = navController,
+                        context = context
                     )
                 }
             }

@@ -43,7 +43,7 @@ fun TopBarConnection(alpha: Float, context: Context, updated: (Boolean) -> Unit)
     checkConnection(context = context, connected = {it -> updating = it})
     LaunchedEffect(key1 = updating) {
         if (updating) {
-            delay(1000)
+            delay(500)
             updated(true)
         }
     }

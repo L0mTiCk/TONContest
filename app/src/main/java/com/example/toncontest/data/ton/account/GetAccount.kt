@@ -37,19 +37,25 @@ suspend fun getAccInfo(tonClient: TonClient, address: String): Coins {
 lateinit var walletV4R2: WalletV4R2
 
 suspend fun getAccount(context: Context): Account {
+    try {
+        val sharedPreferences = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
+        val mnemonic = sharedPreferences.getString("MNEMONIC", "")?.split("|")
+        val privateKey = PrivateKeyEd25519(Mnemonic.toSeed(mnemonic!!))
+        walletV4R2 = WalletV4R2(0, privateKey, liteClient)
+        val address = walletV4R2.address.toString(userFriendly = true)
+        val balance = getAccInfo(tonClient, address)
+        account = Account(address = address, balance = balance)
+        Log.d("transactions", mnemonic.toString())
+        Log.d("transactions", "Data.importMnemonic = " + Data.importMnemonic.toString())
+        Log.d("transactions", account.address + " " + account.balance)
+        walletV4R2.createStateInit()
+        getTransactions(account)
 
-    val sharedPreferences = context.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
-    val mnemonic = sharedPreferences.getString("MNEMONIC", "")?.split("|")
-    val privateKey = PrivateKeyEd25519(Mnemonic.toSeed(mnemonic!!))
-    walletV4R2 = WalletV4R2(0, privateKey, liteClient)
-    val address = walletV4R2.address.toString(userFriendly = true)
-    val balance = getAccInfo(tonClient, address)
-    account = Account(address = address, balance = balance)
-    Log.d("transactions", mnemonic.toString())
-    Log.d("transactions", "Data.importMnemonic = " + Data.importMnemonic.toString())
-    Log.d("transactions", account.address + " " + account.balance)
-    walletV4R2.createStateInit()
-    getTransactions(account)
-
-    return account
+        return account
+    } catch (e: Exception) {
+        account = Account(address = "aaaabbbbccccaaaabbbbbccccaaaabbbbccccaaaabbbbcccc", balance = Coins(
+            VarUInteger(0)
+        ))
+        return account
+    }
 }

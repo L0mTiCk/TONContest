@@ -12,6 +12,7 @@ import org.ton.mnemonic.Mnemonic
 
 suspend fun importCheck(): Boolean {
     //val mnemonic = Data.importMnemonic
+    //TODO: delete my mnemonic
     var mnemonic = listOf(
         "wise",
         "asthma",

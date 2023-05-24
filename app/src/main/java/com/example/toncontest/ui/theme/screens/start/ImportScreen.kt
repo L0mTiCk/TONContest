@@ -1,20 +1,52 @@
 package com.example.toncontest.ui.theme.screens.start
 
 import android.content.Context
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -248,34 +280,73 @@ fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    isError = !text.isEmpty() && !Mnemonic.mnemonicWords().contains(text)
-    TextField(
-        value = text,
-        singleLine = true,
-        onValueChange = {
-            text = it.replace(" ", "")
-            Data.importMnemonic[number - 1] = it.replace(" ", "")
-        },
-        leadingIcon = {
-            Text(
-                text = "$number:",
-                color = Color.Gray,
-                fontSize = 15.sp,
-                textAlign = TextAlign.End,
-                modifier = Modifier.width(24.dp)
-            )
-        },
-        modifier = Modifier
-            .onFocusChanged { isFocused = it.isFocused }
-            .height(55.dp)
-            .width(200.dp),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-            focusedIndicatorColor = Light_Blue,
-            unfocusedIndicatorColor = Color.Gray,
-            disabledIndicatorColor = Color.Gray
-        ),
-        isError = isError
-    )
-}
+    var hintList by remember { mutableStateOf(mutableListOf("")) }
 
+    LaunchedEffect(key1 = text) {
+        if (text.isNotEmpty()) {
+            hintList = Mnemonic.mnemonicWords()
+                .filter { it.startsWith(text, ignoreCase = true) } as MutableList<String>
+            Log.d("importHint", hintList.toString())
+        }
+    }
+
+    isError = !text.isEmpty() && !Mnemonic.mnemonicWords().contains(text)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AnimatedVisibility(
+            visible = isFocused && isError && hintList.isNotEmpty(),
+        ) {
+            LazyRow(
+                modifier = Modifier
+                    .scrollable(rememberScrollState(), orientation = Orientation.Horizontal)
+                    .shadow(3.dp, shape = RoundedCornerShape(10.dp))
+                    .background(Color.White, RoundedCornerShape(10.dp))
+                    .widthIn(max = 200.dp)
+                    .height(45.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                items(hintList) {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .clickable {
+                                    text = it
+                                }
+                                .indication(MutableInteractionSource(), null),
+                            )
+                    }
+            }
+        }
+        TextField(
+            value = text,
+            singleLine = true,
+            onValueChange = {
+                text = it.replace(" ", "")
+                Data.importMnemonic[number - 1] = it.replace(" ", "")
+            },
+            leadingIcon = {
+                Text(
+                    text = "$number:",
+                    color = Color.Gray,
+                    fontSize = 15.sp,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.width(24.dp)
+                )
+            },
+            modifier = Modifier
+                .onFocusChanged { isFocused = it.isFocused }
+                .height(55.dp)
+                .width(200.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Light_Blue,
+                unfocusedIndicatorColor = Color.Gray,
+                disabledIndicatorColor = Color.Gray
+            ),
+            isError = isError,
+        )
+    }
+}

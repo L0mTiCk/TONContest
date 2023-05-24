@@ -1,5 +1,6 @@
 package com.example.toncontest.ui.theme.components.main.transaction
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -48,7 +49,7 @@ import com.example.toncontest.ui.theme.robotoFamily
 
 
 @Composable
-fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: String, navController: NavController) {
+fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: String, navController: NavController, context: Context) {
     val transaction = cardList.first { it.id == transactionId }
     val amountColor = if (transaction.isIncome) TonGreen else TonRed
     val amountString = transaction.amount.toString().split('.')
@@ -213,7 +214,7 @@ fun TransactionCard(onDrag: (Boolean) -> Unit, transactionId: String, navControl
                 }
                 DetailsAddressField(addressType = addressType, address = address)
                 TransactionIdField(id = transaction.id)
-                ViewInExplorerField()
+                ViewInExplorerField(id = transaction.id, context = context)
             }
             SendToAddressButton(address = address, navController = navController)
         }

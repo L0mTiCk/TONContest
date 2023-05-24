@@ -2,6 +2,7 @@ package com.example.toncontest.ui.theme.screens.main
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -61,6 +62,7 @@ fun LogInScreen(navController: NavController, context: Context) {
     var isNavigated by remember { mutableStateOf(false) }
 
 
+
     @Composable
     fun PasscodeKeyboard() {
 
@@ -69,7 +71,6 @@ fun LogInScreen(navController: NavController, context: Context) {
             var backColor = if (index != -2) Light_Gray else Color.Transparent
             Button(
                 onClick = {
-                    //TODO: make this shit working
                     if (currentIndex < numOfDigits) {
                         password.add(index)
                         currentIndex++
@@ -290,13 +291,14 @@ fun LogInScreen(navController: NavController, context: Context) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     repeat(numOfDigits) { index ->
-                        val circleColor =
+                        val circleColor = animateColorAsState(targetValue =
                             if (index < currentIndex) Color.Black else Color.LightGray
+                        )
                         Box(
                             modifier = Modifier
                                 .size(24.dp)
                                 .padding(4.dp)
-                                .background(color = circleColor, shape = CircleShape)
+                                .background(color = circleColor.value, shape = CircleShape)
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                     }
