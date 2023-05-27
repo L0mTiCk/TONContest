@@ -26,8 +26,6 @@ fun getValues() {
     var url = URL("https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd%2Crub%2Ceur")
     CoroutineScope(Dispatchers.IO).launch {
         val connection = url.openConnection()
-
-// Чтение JSON-данных
         val inputStream = connection.getInputStream()
         val jsonText = inputStream.bufferedReader().use { it.readText() }
         var unsorted = jsonText.split("{")[2].split(",")
@@ -38,8 +36,5 @@ fun getValues() {
         values.usd = temp[0]
         values.rub = temp[1]
         values.eur = temp[2]
-
-        println(unsorted)
-        println(temp)
     }
 }

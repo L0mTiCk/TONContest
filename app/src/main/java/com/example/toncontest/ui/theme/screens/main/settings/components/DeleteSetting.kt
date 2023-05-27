@@ -40,7 +40,7 @@ fun DeleteSetting(navController: NavController, context: Context) {
                 text = { Text(text = Data.deleteWalletAlertText) },
                 confirmButton = {
                     Text(text = Data.deleteWalletConfirmButton,
-                        color = Light_Blue,
+                        color = TonRed,
                         fontFamily = robotoFamily,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
@@ -48,6 +48,7 @@ fun DeleteSetting(navController: NavController, context: Context) {
                             .clickable {
                                 showDialogLocal.value = false
                                 showDialog = false
+                                Data.isFirstLaunch = true
                                 sharedPreferences
                                     .edit()
                                     .clear()

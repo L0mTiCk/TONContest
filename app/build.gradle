@@ -69,7 +69,6 @@ dependencies {
     //QR Scanner + generator
     implementation 'com.google.zxing:core:3.4.1'
     implementation("io.github.g00fy2.quickie:quickie-bundled:1.6.0")
-    //implementation("io.github.g0dkar:qrcode-kotlin-android:3.3.0")
 
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
     implementation "com.airbnb.android:lottie-compose:6.0.0"

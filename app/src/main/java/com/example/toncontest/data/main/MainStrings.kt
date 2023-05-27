@@ -70,4 +70,9 @@ object MainStrings {
     const val sendDoneHeader = "Done"
     const val sendDoneMain = " Toncoin have been sent to"
 
+    //ton connect
+    const val tonConnectTitle = "Connect to Fragment"
+    const val tonConnectMain = "fragment.io is requesting access to your wallet address "
+    const val tonConnectHint = "Be sure to check the service address before connecting the wallet."
+    const val tonConnectButton = "Connect Wallet"
 }

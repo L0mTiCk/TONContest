@@ -23,7 +23,6 @@ import com.example.toncontest.ui.theme.screens.NavBack
 
 @Composable
 fun CongratsScreen(navController: NavController) {
-    //UI
     Scaffold(topBar = { NavBack(navController = navController)},
     backgroundColor = Color.White) {
         Column(

@@ -1,14 +1,29 @@
 package com.example.toncontest.ui.theme.screens.start
 
 import android.content.Context
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,13 +45,24 @@ import com.example.toncontest.ui.theme.screens.ButtonWithAlertDialog
 import com.example.toncontest.ui.theme.screens.DefaultText
 import com.example.toncontest.ui.theme.screens.Loader
 import com.example.toncontest.ui.theme.screens.NavBack
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 
 @Composable
 fun RecoveryScreen(navController: NavController, isFirstLaunch: Boolean, context: Context) {
-    //set entry time
     setEntryTime()
     var scrollState = rememberScrollState()
-    //UI
+    var mnemonic by remember { mutableStateOf(mutableListOf<String>()) }
+
+    LaunchedEffect(key1 = Unit) {
+        CoroutineScope(Dispatchers.IO).async {
+            delay(20)
+            mnemonic = getMnemonic(context = context) as MutableList<String>
+        }
+    }
+
     Column(modifier = Modifier
         .fillMaxWidth()
     ) {
@@ -70,9 +96,11 @@ fun RecoveryScreen(navController: NavController, isFirstLaunch: Boolean, context
                 )
                 DefaultText(text = Data.recoveryMainText, fontFamily = robotoFamily, textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium, fontSize = 15.sp , width = 280.dp)
-                MnemonicPhrases(
-                    mnemonics = getMnemonic(context = context)
-                )
+                AnimatedVisibility(visible = mnemonic.isNotEmpty()) {
+                    MnemonicPhrases(
+                        mnemonics = mnemonic
+                    )
+                }
                 Spacer(modifier = Modifier.height(40.dp))
                 if (isFirstLaunch) {
                     ButtonWithAlertDialog(
@@ -92,7 +120,6 @@ fun MnemonicPhrases(mnemonics: List<String>) {
         modifier = Modifier
             .width(280.dp)
             .padding(top = 40.dp)
-
     ) {
         LazyHorizontalGrid(
             rows = GridCells.Fixed(12),

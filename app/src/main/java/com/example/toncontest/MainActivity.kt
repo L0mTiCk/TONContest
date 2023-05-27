@@ -22,6 +22,8 @@ import com.example.toncontest.data.main.send.sendInfo
 import com.example.toncontest.data.start.Biometric
 import com.example.toncontest.data.ton.client.liteClient
 import com.example.toncontest.ui.theme.TONContestTheme
+import com.example.toncontest.ui.theme.components.anim.navAnim.NavAnimationHorizontally
+import com.example.toncontest.ui.theme.components.anim.navAnim.NavAnimationVertically
 import com.example.toncontest.ui.theme.screens.main.LogInScreen
 import com.example.toncontest.ui.theme.screens.main.MainScreen
 import com.example.toncontest.ui.theme.screens.main.qrcode.NoCameraScreen
@@ -48,7 +50,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         val sharedPref = this.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
         //TODO: remove this line
-        //sharedPref.edit().clear().apply()
+        sharedPref.edit().clear().apply()
         val isWalletCreated = sharedPref.getBoolean("CREATED", false)
         val startDestination = if (isWalletCreated) "login" else "start"
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
@@ -96,34 +98,108 @@ class MainActivity : FragmentActivity() {
                     color = Color.White
                 ) {
                     Box(Modifier.fillMaxSize()) {
-                        NavHost(navController = navController, startDestination = startDestination) {
-                            composable(route = "start") { StartScreen(navController = navController) }
-                            composable(route = "congrats") { CongratsScreen(navController = navController) }
-                            composable(route = "recovery") { RecoveryScreen(navController = navController, Data.isFirstLaunch, context = this@MainActivity) }
-                            composable(route = "testing") { TestingScreen(navController = navController) }
-                            composable(route = "success") { SuccessScreen(navController = navController, context = context) }
-                            composable(route = "passcode") { PasscodeScreen(navController = navController, this@MainActivity) }
-                            composable(route = "import") { ImportScreen(navController = navController, this@MainActivity) }
-                            composable(route = "successImport") { SuccessImportScreen(navController = navController) }
-                            composable(route = "noMnemonic") { NoMnemonicScreen(navController = navController) }
-                            composable(route = "done") { DoneScreen(navController = navController) }
+                       NavHost(navController = navController, startDestination = startDestination) {
+                            composable(route = "start", ) { StartScreen(navController = navController) }
+                            composable(route = "congrats") {
+                                NavAnimationHorizontally {
+                                    CongratsScreen(navController = navController)
+                                }
+                            }
+                            composable(route = "recovery") {
+                                NavAnimationHorizontally {
+                                    RecoveryScreen(
+                                        navController = navController,
+                                        Data.isFirstLaunch,
+                                        context = this@MainActivity
+                                    )
+                                }
+                            }
+                            composable(route = "testing") {
+                                NavAnimationHorizontally {
+                                    TestingScreen(navController = navController)
+                                }
+                            }
+                            composable(route = "success") {
+                                NavAnimationHorizontally {
+                                    SuccessScreen(navController = navController, context = context)
+                                }
+                            }
+                            composable(route = "passcode") {
+                                NavAnimationHorizontally {
+                                    PasscodeScreen(navController = navController, this@MainActivity)
+                                }
+                            }
+                            composable(route = "import") {
+                                NavAnimationHorizontally {
+                                    ImportScreen(navController = navController, this@MainActivity)
+                                }
+                            }
+                            composable(route = "successImport") {
+                                NavAnimationHorizontally {
+                                    SuccessImportScreen(navController = navController)
+                                }
+                            }
+                            composable(route = "noMnemonic") {
+                                NavAnimationHorizontally {
+                                    NoMnemonicScreen(navController = navController)
+                                }
+                            }
+                            composable(route = "done") {
+                                NavAnimationHorizontally {
+                                    DoneScreen(navController = navController)
+                                }
+                            }
 
-                            composable(route = "main") { MainScreen(navController = navController, context = this@MainActivity) }
-                            composable(route = "settings") { SettingsScreen(navController = navController, context = this@MainActivity) }
-                            composable(route = "login") { LogInScreen( navController = navController, context = this@MainActivity) }
-                            composable(route = "sendStart") { SendStartScreen(navController = navController) }
-                            composable(route = "sendStart/{param}") {backStackEntry ->
-                                val param = backStackEntry.arguments?.getString("param")
-                                if (param != null) {
-                                    SendStartScreen(navController = navController, param)
-                                } else {
+                            composable(route = "main") {
+                                NavAnimationVertically {
+                                    MainScreen(
+                                        navController = navController,
+                                        context = this@MainActivity
+                                    )
+                                }
+                            }
+                            composable(route = "settings") {
+                                NavAnimationHorizontally {
+                                    SettingsScreen(
+                                        navController = navController,
+                                        context = this@MainActivity
+                                    )
+                                }
+                            }
+                            composable(route = "login") {LogInScreen( navController = navController, context = this@MainActivity) }
+                            composable(route = "sendStart") {
+                                NavAnimationVertically {
                                     SendStartScreen(navController = navController)
                                 }
                             }
-                            composable(route = "sendAmount") { SendAmountScreen(navController = navController) }
-                            composable(route = "sendConfirm") { SendConfirmScreen(navController = navController) }
-                            composable(route = "sendFinal") { SendFinalScreen(navController = navController) }
-                            composable(route = "noCamera") { NoCameraScreen(navController = navController, context = this@MainActivity) }
+                            composable(route = "sendStart/{param}") {backStackEntry ->
+                                val param = backStackEntry.arguments?.getString("param")
+                                NavAnimationHorizontally {
+                                    if (param != null) {
+                                        SendStartScreen(navController = navController, param)
+                                    } else {
+                                        SendStartScreen(navController = navController)
+                                    }
+                                }
+                            }
+                            composable(route = "sendAmount") {
+                                    SendAmountScreen(navController = navController)
+                            }
+                            composable(route = "sendConfirm") {
+                                    SendConfirmScreen(navController = navController)
+
+                            }
+                            composable(route = "sendFinal") {
+                                    SendFinalScreen(navController = navController)
+                            }
+                            composable(route = "noCamera") {
+                                NavAnimationHorizontally {
+                                    NoCameraScreen(
+                                        navController = navController,
+                                        context = this@MainActivity
+                                    )
+                                }
+                            }
                             //deeplinks
 
                             //idk why, but if there are 2, even on ton://transfer/..... click share screen opens
@@ -165,7 +241,12 @@ class MainActivity : FragmentActivity() {
                                 sendInfo.recipient = (backStackEntry.arguments?.getString("wallet_address") ?: "" )
                                 sendInfo.amount = (backStackEntry.arguments?.getString("amount")?.toDouble() ?: 0.01 )
                                 sendInfo.comment = (backStackEntry.arguments?.getString("comment") ?: "" )
-                                SendConfirmScreen(navController = navController, isBlocked = true)
+                                NavAnimationHorizontally {
+                                    SendConfirmScreen(
+                                        navController = navController,
+                                        isBlocked = true
+                                    )
+                                }
                             }
                         }
                     }

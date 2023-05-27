@@ -67,7 +67,7 @@ fun DoneScreen(navController: NavController){
                 route = "main",
                 navController = navController,
                 isPopUp = true,
-                popUpRoute = "done"
+                popUpRoute = "start"
             )
             Spacer(modifier = Modifier.height(117.dp))
         }

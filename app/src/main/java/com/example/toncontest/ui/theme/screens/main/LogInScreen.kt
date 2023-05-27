@@ -62,7 +62,6 @@ fun LogInScreen(navController: NavController, context: Context) {
     var isNavigated by remember { mutableStateOf(false) }
 
 
-
     @Composable
     fun PasscodeKeyboard() {
 
@@ -291,7 +290,8 @@ fun LogInScreen(navController: NavController, context: Context) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     repeat(numOfDigits) { index ->
-                        val circleColor = animateColorAsState(targetValue =
+                        val circleColor = animateColorAsState(
+                            targetValue =
                             if (index < currentIndex) Color.Black else Color.LightGray
                         )
                         Box(
