@@ -8,8 +8,8 @@ import org.ton.lite.client.LiteClient
 
 var liteClient = LiteClient(
     coroutineContext = Dispatchers.Default,
-    //liteClientConfigGlobal = GLOBAL_CONFIG
-    liteClientConfigGlobal = TESTNET_CONFIG
+    liteClientConfigGlobal = GLOBAL_CONFIG
+    //liteClientConfigGlobal = TESTNET_CONFIG
 )
 
 var tonMapper = TonMapper()

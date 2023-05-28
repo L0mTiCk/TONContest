@@ -152,13 +152,7 @@ fun TestingScreen(navController: NavController) {
                     //.height(170.dp)
             ) {
                 items(mnemonicRandom) {  item ->
-                    TestingTextInput(
-                        number = item,
-                        Modifier
-                            .padding(bottom = 8.dp)
-                            .width(200.dp)
-                            .height(55.dp)
-                    )
+                    TestingTextInput( number = item )
                 }
             }
             Column(
@@ -182,7 +176,7 @@ fun TestingScreen(navController: NavController) {
 }
 
 @Composable
-fun TestingTextInput(number: Int, modifier: Modifier = Modifier) {
+fun TestingTextInput(number: Int) {
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
@@ -246,7 +240,8 @@ fun TestingTextInput(number: Int, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .onFocusChanged { isFocused = it.isFocused }
                 .height(55.dp)
-                .width(200.dp),
+                .width(200.dp)
+                .padding(bottom = 8.dp),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Light_Blue,
