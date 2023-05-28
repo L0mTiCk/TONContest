@@ -49,8 +49,6 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPref = this.getSharedPreferences("TON_WALLET", Context.MODE_PRIVATE)
-        //TODO: remove this line
-        sharedPref.edit().clear().apply()
         val isWalletCreated = sharedPref.getBoolean("CREATED", false)
         val startDestination = if (isWalletCreated) "login" else "start"
         val isBiometric = sharedPref.getBoolean("BIOMETRIC", false)
@@ -90,7 +88,10 @@ class MainActivity : FragmentActivity() {
             TONContestTheme(darkTheme = false) {
                 setNavigateFunction { it ->
                     if (it) {
-                        navController.navigate("login")
+                        if (Data.isLoginNeeded) {
+                            navController.navigate("login")
+                            Data.isLoginNeeded = false
+                        }
                     }
                 }
                 Surface(

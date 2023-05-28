@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -44,12 +45,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,6 +72,7 @@ import org.ton.mnemonic.Mnemonic
 
 var isImport = false
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ImportScreen(navController: NavController, context: Context) {
     var showDialog by remember { mutableStateOf(false) }
@@ -314,6 +318,8 @@ fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
                                 .padding(horizontal = 16.dp)
                                 .clickable {
                                     text = it
+                                    Data.importMnemonic[number - 1] = it
+                                    ImeAction.Next
                                 }
                                 .indication(MutableInteractionSource(), null),
                             )
@@ -326,6 +332,7 @@ fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
             onValueChange = {
                 text = it.replace(" ", "")
                 Data.importMnemonic[number - 1] = it.replace(" ", "")
+                Log.d("transactions", "textfield №$number " + Data.importMnemonic[number - 1])
             },
             leadingIcon = {
                 Text(
@@ -347,6 +354,7 @@ fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
                 disabledIndicatorColor = Color.Gray
             ),
             isError = isError,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
         )
     }
 }

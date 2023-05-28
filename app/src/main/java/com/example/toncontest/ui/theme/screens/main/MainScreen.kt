@@ -65,12 +65,12 @@ import com.example.toncontest.data.ton.account.getAccount
 import com.example.toncontest.ui.theme.components.main.CreatedWallet
 import com.example.toncontest.ui.theme.components.main.ReceiveButton
 import com.example.toncontest.ui.theme.components.main.SendButton
-import com.example.toncontest.ui.theme.components.main.tonconnect.TonConnectCard
 import com.example.toncontest.ui.theme.components.main.topbar.main.TopBarBalance
 import com.example.toncontest.ui.theme.components.main.transaction.TransactionCard
 import com.example.toncontest.ui.theme.components.main.transaction.TransactionColumn
 import com.example.toncontest.ui.theme.robotoFamily
 import com.example.toncontest.ui.theme.screens.Loader
+import com.example.toncontest.ui.theme.screens.main.receive.ReceiveCard
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanCustomCode
 import io.github.g00fy2.quickie.config.BarcodeFormat
@@ -307,7 +307,6 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-//                        verticalArrangement = Arrangement.Bottom,
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -399,11 +398,10 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
                         targetOffsetY = { 1500 }
                     )
                 ) {
-//                    ReceiveCard(
-//                        onDrag = { newReceive -> isReceive = newReceive },
-//                        context = context
-//                    )
-                    TonConnectCard(onDrag = {it -> isReceive = it})
+                    ReceiveCard(
+                        onDrag = { newReceive -> isReceive = newReceive },
+                        context = context
+                    )
                 }
                 AnimatedVisibility(
                     visible = showTransactionCard,
@@ -427,7 +425,5 @@ fun MainScreen(navController: NavController, context: Context, isReceive: Boolea
         )
         PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
-
     Data.isFirstLaunch = false
-
 }

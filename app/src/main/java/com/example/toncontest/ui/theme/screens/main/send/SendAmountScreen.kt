@@ -66,16 +66,14 @@ import com.example.toncontest.ui.theme.robotoFamily
 @Composable
 fun SendAmountScreen(navController: NavController) {
     val address = sendInfo.recipient
+    //TODO: no dns support
     val dns = "andre.ton"
     val isDns = true
     val balance = account.balance.toString().toDouble()
     var amount by remember { mutableStateOf("-1") }
     var checked by remember { mutableStateOf(false) }
     var numColor = animateColorAsState(targetValue = if ((amount.toDouble()) > balance) TonRed else Color.Black)
-    //var numColor = animateColorAsState(targetValue = Color.Black)
     var overflowAlpha = animateFloatAsState(targetValue = if (amount.toDouble() > balance) 1f else 0f)
-    //var overflowAlpha = animateFloatAsState(targetValue = 1f)
-
 
     LaunchedEffect(key1 = amount) {
         Log.d("amountSend", amount)
@@ -85,10 +83,7 @@ fun SendAmountScreen(navController: NavController) {
     fun buildAnnotatedStringWithNums(text: String): AnnotatedString {
         val builder = AnnotatedString.Builder()
 
-
         var splitStr = text.split(".")
-        Log.d("amountSend", "split str = " + splitStr.toString())
-        Log.d("amountSend",  "Temp str = " + text)
         if (splitStr.size == 1) {
             builder.withStyle(
                 SpanStyle(

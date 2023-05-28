@@ -201,6 +201,7 @@ fun LogInScreen(navController: NavController, context: Context) {
             }
             password.clear()
             currentIndex = 0
+            Data.isLoginNeeded = true
         } else {
             Log.d("login", navController.previousBackStackEntry.toString())
             password.clear()

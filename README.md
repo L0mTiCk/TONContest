@@ -18,7 +18,7 @@ This repository contains an Android application developed for the Ton Wallet Con
 
 - **Deeplink functionality:** The Deeplink functionality in the application has certain limitations. It can either be used for sending funds or sharing the QR code, but not both simultaneously.
 
-- **Biometric settings:** Biometric checkbox before setting passcode is not working.
+- **Internet connectivity:** The application requires an active internet connection to function properly. It cannot be launched or reopened without internet connectivity.
 
 ## Getting Started
 

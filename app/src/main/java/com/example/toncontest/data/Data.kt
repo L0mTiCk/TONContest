@@ -4,6 +4,7 @@ import com.example.toncontest.data.testing.mnemonicRandom
 
 object Data {
     var isFirstLaunch = true
+    var isLoginNeeded = true
 
     lateinit var mnemonic0: List<String>
 
