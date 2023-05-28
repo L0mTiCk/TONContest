@@ -19,7 +19,7 @@ suspend fun sendTransaction() {
                 storeUInt(0, 32)
                 storeBytes(sendInfo.comment.toByteArray())
             }
-            stateInit = walletV4R2.createStateInit()
+            stateInit = null
             sendMode = SendMode.PAY_GAS_SEPARATELY
         }
     )   

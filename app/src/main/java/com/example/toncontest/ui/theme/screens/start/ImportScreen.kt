@@ -319,7 +319,6 @@ fun ImportTextInput(number: Int, modifier: Modifier = Modifier) {
                                 .clickable {
                                     text = it
                                     Data.importMnemonic[number - 1] = it
-                                    ImeAction.Next
                                 }
                                 .indication(MutableInteractionSource(), null),
                             )

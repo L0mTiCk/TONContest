@@ -1,10 +1,17 @@
 package com.example.toncontest.ui.theme.screens.start
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -12,9 +19,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -177,8 +186,47 @@ fun TestingTextInput(number: Int, modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
+    var hintList by remember { mutableStateOf(mutableListOf("")) }
+
+    LaunchedEffect(key1 = text) {
+        if (text.isNotEmpty()) {
+            hintList = Mnemonic.mnemonicWords()
+                .filter { it.startsWith(text, ignoreCase = true) } as MutableList<String>
+            Log.d("importHint", hintList.toString())
+        }
+    }
+
     isError = !text.isEmpty() && !Mnemonic.mnemonicWords().contains(text)
-    Box(modifier = modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AnimatedVisibility(
+            visible = isFocused && isError && hintList.isNotEmpty(),
+        ) {
+            LazyRow(
+                modifier = Modifier
+                    .scrollable(rememberScrollState(), orientation = Orientation.Horizontal)
+                    .shadow(3.dp, shape = RoundedCornerShape(10.dp))
+                    .background(Color.White, RoundedCornerShape(10.dp))
+                    .widthIn(max = 200.dp)
+                    .height(45.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                items(hintList) {
+                    Text(
+                        text = it,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable {
+                                text = it
+                                textFieldsInput[mnemonicRandom.indexOf(number)] = it
+                            }
+                            .indication(MutableInteractionSource(), null),
+                    )
+                }
+            }
+        }
         TextField(
             value = text,
             singleLine = true,
@@ -197,14 +245,16 @@ fun TestingTextInput(number: Int, modifier: Modifier = Modifier) {
             },
             modifier = Modifier
                 .onFocusChanged { isFocused = it.isFocused }
-                .height(55.dp),
+                .height(55.dp)
+                .width(200.dp),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Light_Blue,
                 unfocusedIndicatorColor = Color.Gray,
                 disabledIndicatorColor = Color.Gray
             ),
-            isError = isError
+            isError = isError,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
         )
     }
 }
